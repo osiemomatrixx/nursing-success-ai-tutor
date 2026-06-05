@@ -273,38 +273,33 @@
                         <rect x="14" y="12" width="7" height="9"/>
                         <rect x="3" y="16" width="7" height="5"/>
                     </svg>
-                    Dashboard
+                    Path Library
                 </a>
                 <a class="nav-item" data-tab="simulation">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
                     </svg>
-                    Clinical Simulations
+                    Interactive Labs
                 </a>
                 <a class="nav-item" data-tab="nclex">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                        <polyline points="14 2 14 8 20 8"/>
-                        <line x1="16" y1="13" x2="8" y2="13"/>
-                        <line x1="16" y1="17" x2="8" y2="17"/>
-                        <polyline points="10 9 9 9 8 9"/>
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
                     </svg>
-                    NCLEX Prep
+                    Skill IQ Assessments
                 </a>
                 <a class="nav-item" data-tab="pharmacology">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <path d="M4.5 16.5c-1.5 1.25-2.5 3-2.5 5h20c0-2-1-3.75-2.5-5"/>
-                        <path d="M12 2C6.5 2 2 6.5 2 12c0 3.5 1.8 6.6 4.5 8.4V16.5"/>
-                        <path d="M17.5 20.4c2.7-1.8 4.5-4.9 4.5-8.4 0-5.5-4.5-10-10-10"/>
-                        <circle cx="12" cy="11" r="3"/>
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
                     </svg>
-                    Pharma & Labs
+                    Reference Center
                 </a>
                 <a class="nav-item" data-tab="chat">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                     </svg>
-                    AI Preceptor
+                    AI Mentor Support
                 </a>
                 <a class="nav-item" data-tab="research">
                     <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -313,7 +308,7 @@
                         <line x1="12" y1="2" x2="12" y2="22"/>
                         <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
                     </svg>
-                    AI Research Lab
+                    Research Playground
                 </a>
             </nav>
 
@@ -342,7 +337,7 @@
 
             <header class="top-header">
                 <div class="welcome-section">
-                    <h1 id="page-title">Clinical Dashboard</h1>
+                    <h1 id="page-title">Path Library</h1>
                     <p id="page-subtitle">Welcome back, Student Nurse. Let's practice clinical judgment today.</p>
                     <div class="header-subline">
                         <span>Structured progression</span>
@@ -355,147 +350,139 @@
                     <div class="portal-meta">RN Pathway • Cohort A</div>
                     <div class="badge-outline">
                         <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
-                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
                         </svg>
-                        Quiz Score: <span id="header-nclex-score">82%</span>
+                        Skill IQ: <span id="header-nclex-score">185</span>
                     </div>
-                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(236, 0, 140, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(0, 187, 249, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
                         💎 Go Premium ($7)
                     </div>
-                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(123, 44, 191, 0.15); border-color: var(--accent); color: #c084fc;">
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(131, 56, 236, 0.15); border-color: var(--accent); color: #c084fc;">
                         👑 Premium active
                     </div>
                 </div>
             </header>
 
-            <!-- DASHBOARD TAB -->
+            <!-- PATH LIBRARY (DASHBOARD) TAB -->
             <section id="dashboard" class="tab-content active">
                 <div class="grid-dashboard">
-                    <div class="glass-card col-12 sales-hero">
-                        <div class="sales-hero-main">
-                            <span class="sales-kicker">ATI-inspired mastery sequence</span>
-                            <h2>Study the way strong nursing programs measure readiness.</h2>
-                            <p>Use blueprint-aligned modules, clinical reasoning drills, and feedback loops that turn each session into measurable progress.</p>
-                            <div class="sales-hero-actions">
-                                <button class="btn-primary" onclick="switchTab('simulation')">Launch Clinical Drill</button>
-                                <button class="btn-outline" onclick="switchTab('nclex')">Run Readiness Quiz</button>
+                    <!-- Skill IQ Hero Card -->
+                    <div class="col-12 skill-iq-callout-card">
+                        <div class="skill-iq-info">
+                            <span class="path-badge">Active Benchmark</span>
+                            <h3>Measure and Track Your Nursing Readiness</h3>
+                            <p>Verify your clinical standing against peer groups. Our adaptive assessment scores your competency in priority care, pharmacology, and physiological adaptation.</p>
+                            <div class="skill-iq-badge-large">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Adaptive Skill IQ Assessment
                             </div>
                         </div>
-                        <div class="sales-hero-aside">
-                            <div class="offer-chip">
-                                Next cohort pricing refresh in
-                                <strong id="offer-countdown">23:59:59</strong>
+                        <div class="skill-iq-score-display">
+                            <div class="skill-iq-score-box">
+                                <div class="score-val" id="dashboard-skill-iq-val">185</div>
+                                <div class="score-lbl">Current IQ</div>
                             </div>
-                            <ul>
-                                <li>Blueprint-aligned practice blocks and rationales</li>
-                                <li>Adaptive remediation after each decision</li>
-                                <li>Competency tracking for exam readiness</li>
-                            </ul>
-                        </div>
-                    </div>
-
-                    <div class="glass-card col-12 benchmark-strip">
-                        <div class="benchmark-item">
-                            <span class="benchmark-label">Program track</span>
-                            <strong class="benchmark-value">RN Readiness Intensive</strong>
-                        </div>
-                        <div class="benchmark-item">
-                            <span class="benchmark-label">Current readiness</span>
-                            <strong class="benchmark-value" id="benchmark-ready-score">82%</strong>
-                        </div>
-                        <div class="benchmark-item">
-                            <span class="benchmark-label">Clinical modules completed</span>
-                            <strong class="benchmark-value" id="benchmark-module-count">4 / 8</strong>
-                        </div>
-                        <div class="benchmark-item">
-                            <span class="benchmark-label">Recommended next block</span>
-                            <strong class="benchmark-value">Priority and Delegation</strong>
+                            <button class="btn-primary" onclick="switchTab('nclex')" style="white-space: nowrap; padding: 0.85rem 1.5rem;">Measure Skill IQ</button>
                         </div>
                     </div>
 
-                    <div class="glass-card col-8 pathway-card">
-                        <h3 class="card-title">Course Roadmap</h3>
-                        <p class="pathway-subtitle">Follow a staged path from foundations to exam simulation with visible progress at every step.</p>
-                        <div class="pathway-rows">
-                            <div class="pathway-row">
-                                <div class="pathway-text">
-                                    <span>Clinical Foundations</span>
-                                    <strong id="pathway-clinical-label">50%</strong>
-                                </div>
-                                <div class="pathway-progress">
-                                    <div class="pathway-progress-fill" id="pathway-clinical-fill" style="width: 50%;"></div>
+                    <!-- Learning Paths Header -->
+                    <div class="col-12" style="margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: white;">Your Learning Paths</h3>
+                    </div>
+
+                    <!-- 3 Learning Path Cards -->
+                    <div class="col-12 paths-grid" style="margin-top: 0;">
+                        <!-- Path 1 -->
+                        <div class="pluralsight-path-card">
+                            <div class="path-header-block">
+                                <span class="path-badge">Learning Path</span>
+                                <h4 class="path-title">NCLEX-RN Prep & Practice</h4>
+                                <p class="path-desc">Master safe, effective care environments, physiological adaptation, and risk reduction rules for the Next-Generation NCLEX.</p>
+                                <div class="path-progress-container">
+                                    <div class="path-progress-info">
+                                        <span>Progress</span>
+                                        <span id="path-nclex-progress-lbl">82%</span>
+                                    </div>
+                                    <div class="path-progress-bar">
+                                        <div class="path-progress-fill" id="path-nclex-progress-fill" style="width: 82%;"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="pathway-row">
-                                <div class="pathway-text">
-                                    <span>Priority and Delegation</span>
-                                    <strong id="pathway-priority-label">65%</strong>
-                                </div>
-                                <div class="pathway-progress">
-                                    <div class="pathway-progress-fill" id="pathway-priority-fill" style="width: 65%;"></div>
+                            <div class="path-meta-strip">
+                                <span>18h 40m remaining</span>
+                                <button class="btn-outline" onclick="switchTab('nclex')" style="padding: 0.4rem 0.85rem; font-size: 0.75rem;">Resume Path</button>
+                            </div>
+                        </div>
+
+                        <!-- Path 2 -->
+                        <div class="pluralsight-path-card">
+                            <div class="path-header-block">
+                                <span class="path-badge">Interactive Lab Path</span>
+                                <h4 class="path-title">Interactive Clinical Rotations</h4>
+                                <p class="path-desc">Build critical clinical reasoning through 8 virtual simulation scenarios covering ER, ICU, Pediatrics, Maternity, and Med-Surg departments.</p>
+                                <div class="path-progress-container">
+                                    <div class="path-progress-info">
+                                        <span>Progress</span>
+                                        <span id="path-rotations-progress-lbl">50%</span>
+                                    </div>
+                                    <div class="path-progress-bar">
+                                        <div class="path-progress-fill" id="path-rotations-progress-fill" style="width: 50%;"></div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="pathway-row">
-                                <div class="pathway-text">
-                                    <span>Pharmacology and Safety</span>
-                                    <strong id="pathway-pharm-label">58%</strong>
+                            <div class="path-meta-strip">
+                                <span>12h 15m remaining</span>
+                                <button class="btn-outline" onclick="switchTab('simulation')" style="padding: 0.4rem 0.85rem; font-size: 0.75rem;">Resume Path</button>
+                            </div>
+                        </div>
+
+                        <!-- Path 3 -->
+                        <div class="pluralsight-path-card">
+                            <div class="path-header-block">
+                                <span class="path-badge">Reference Path</span>
+                                <h4 class="path-title">Dosage & Pharmacological Safety</h4>
+                                <p class="path-desc">Strengthen dosage calculations, heparin infusions titration, IV flow rates, and high-yield critical nursing considerations.</p>
+                                <div class="path-progress-container">
+                                    <div class="path-progress-info">
+                                        <span>Progress</span>
+                                        <span id="path-pharm-progress-lbl">60%</span>
+                                    </div>
+                                    <div class="path-progress-bar">
+                                        <div class="path-progress-fill" id="path-pharm-progress-fill" style="width: 60%;"></div>
+                                    </div>
                                 </div>
-                                <div class="pathway-progress">
-                                    <div class="pathway-progress-fill" id="pathway-pharm-fill" style="width: 58%;"></div>
-                                </div>
+                            </div>
+                            <div class="path-meta-strip">
+                                <span>6h 30m remaining</span>
+                                <button class="btn-outline" onclick="switchTab('pharmacology')" style="padding: 0.4rem 0.85rem; font-size: 0.75rem;">Resume Path</button>
                             </div>
                         </div>
                     </div>
 
-                    <div class="glass-card col-4 benchmark-callout">
-                        <h3 class="card-title">Today’s Study Plan</h3>
-                        <div class="study-plan-list">
-                            <div class="study-plan-item">
-                                <span class="study-plan-step">01</span>
-                                <div>
-                                    <strong>Complete one simulation</strong>
-                                    <p>Focus on a priority-driven case and review the SBAR summary.</p>
-                                </div>
-                            </div>
-                            <div class="study-plan-item">
-                                <span class="study-plan-step">02</span>
-                                <div>
-                                    <strong>Take a 5-question quiz</strong>
-                                    <p>Use rationales to identify your weakest blueprint area.</p>
-                                </div>
-                            </div>
-                            <div class="study-plan-item">
-                                <span class="study-plan-step">03</span>
-                                <div>
-                                    <strong>Review one remediation topic</strong>
-                                    <p>Target pharmacology or delegation based on your score trend.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <button class="btn-primary" onclick="switchTab('simulation')" style="width: 100%; margin-top: 1rem;">Start Study Plan</button>
-                    </div>
-
-                    <!-- Competency Radar Graph -->
+                    <!-- Charts row -->
                     <div class="glass-card col-6">
-                        <h3 class="card-title">Competency Map</h3>
+                        <h3 class="card-title">Competency Profile Map</h3>
                         <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
                             <canvas id="radar-chart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Performance Score Line Graph -->
                     <div class="glass-card col-6">
-                        <h3 class="card-title">Readiness Trend</h3>
+                        <h3 class="card-title">Readiness Index Trend</h3>
                         <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
                             <canvas id="line-chart"></canvas>
                         </div>
                     </div>
 
-                    <!-- Performance Stats -->
+                    <!-- Mnemonic and completed modules count -->
                     <div class="glass-card col-4">
-                        <h3 class="card-title">Completed Modules</h3>
+                        <h3 class="card-title">Completed Rotations</h3>
                         <div class="stat-value" id="stats-sim-count">4</div>
-                        <p class="stat-desc">Build toward 30 high-quality cases for a stronger clinical baseline.</p>
+                        <p class="stat-desc">Complete all 8 standard rotations to unlock advanced clinical certification.</p>
                         <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
                             <span class="badge-outline" style="font-size: 0.75rem;">ER</span>
                             <span class="badge-outline" style="font-size: 0.75rem;">ICU</span>
@@ -508,143 +495,186 @@
                         </div>
                     </div>
 
-                    <!-- Daily Wisdom Mnemonic -->
-                    <div class="glass-card col-4">
-                        <h3 class="card-title" style="color: var(--warning);">
-                            Mnemonic of the Day
-                        </h3>
+                    <div class="glass-card col-8">
+                        <h3 class="card-title" style="color: var(--warning);">High-Yield Mnemonic of the Day</h3>
                         <div style="margin-top: 0.5rem;">
-                            <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">MONA TASS</h4>
-                            <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
-                                <strong>Myocardial Infarction Management:</strong><br>
-                                <strong>M</strong>orphine, <strong>O</strong>xygen, <strong>N</strong>itroglycerin, <strong>A</strong>spirin.<br>
-                                <strong>T</strong>hrombolytics, <strong>A</strong>nticoagulants, <strong>S</strong>tool Softeners, <strong>S</strong>tatins.
+                            <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: white;">MONA TASS (Acute Coronary Syndrome Protocol)</h4>
+                            <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+                                <strong>Initial ACS Interventions:</strong> 
+                                <strong style="color: white;">M</strong>orphine, 
+                                <strong style="color: white;">O</strong>xygen, 
+                                <strong style="color: white;">N</strong>itroglycerin, 
+                                <strong style="color: white;">A</strong>spirin.<br>
+                                <strong>Secondary Support:</strong> 
+                                <strong style="color: white;">T</strong>hrombolytics, 
+                                <strong style="color: white;">A</strong>nticoagulants (Heparin), 
+                                <strong style="color: white;">S</strong>tool Softeners, 
+                                <strong style="color: white;">S</strong>tatins.
                             </p>
                         </div>
                     </div>
 
-                    <!-- Next Gen NCLEX Card -->
-                    <div class="glass-card col-4">
-                        <h3 class="card-title">NCLEX Prep Status</h3>
-                        <p style="margin-bottom: 1.5rem; line-height: 1.6; color: var(--text-secondary);">
-                            Your cumulative test score is <strong id="stats-nclex-score">82%</strong>. Take a quick quiz or start a comprehensive review.
-                        </p>
-                        <div style="display: flex; gap: 0.75rem;">
-                            <button class="btn-primary" onclick="switchTab('nclex')" style="flex-grow: 1;">Custom Quiz</button>
-                            <button class="btn-outline" onclick="startMockExam()" style="flex-grow: 1;">Mock Exam</button>
-                        </div>
+                    <!-- Catalog/Rotations Grid -->
+                    <div class="col-12" style="margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: white;">Rotations Library</h3>
                     </div>
 
-                    <!-- Department Experience Cards -->
-                    <div class="glass-card col-12">
-                        <h3 class="card-title">Clinical Rotations</h3>
-                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 0.5rem;" id="dashboard-dept-grid">
+                    <div class="glass-card col-12" style="padding-top: 1rem;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;" id="dashboard-dept-grid">
                             <!-- Populated dynamically -->
                         </div>
                     </div>
                 </div>
             </section>
 
-            <!-- CLINICAL SIMULATION TAB -->
+            <!-- INTERACTIVE LABS (SIMULATION) TAB -->
             <section id="simulation" class="tab-content">
-                <div class="simulator-layout">
-                    <!-- Left Department Selector -->
-                    <div class="dept-panel" id="sim-dept-panel">
-                        <!-- Populated dynamically via JS -->
-                    </div>
+                <div class="lab-layout-wrapper">
+                    <!-- Left Pane: Lab Instructions & SBAR Handover -->
+                    <aside class="lab-panel left-pane">
+                        <div class="lab-panel-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                Patient chart details
+                            </h3>
+                        </div>
+                        <div class="lab-panel-body">
+                            <div class="sbar-tab-menu" id="sbar-tabs-container">
+                                <button class="sbar-tab-btn active" onclick="switchSbarTab('s')">Situation</button>
+                                <button class="sbar-tab-btn" onclick="switchSbarTab('b')">Background</button>
+                                <button class="sbar-tab-btn" onclick="switchSbarTab('a')">Assessment</button>
+                                <button class="sbar-tab-btn" onclick="switchSbarTab('r')">Recommendation</button>
+                            </div>
+                            <div id="sbar-tab-content-s" class="sbar-tab-content active" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Situation (S):</strong>
+                                <span id="sbar-situation">No active simulation. Select a lab from the right column to begin.</span>
+                            </div>
+                            <div id="sbar-tab-content-b" class="sbar-tab-content" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Background (B):</strong>
+                                <span id="sbar-background">-</span>
+                            </div>
+                            <div id="sbar-tab-content-a" class="sbar-tab-content" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Assessment (A):</strong>
+                                <span id="sbar-assessment">-</span>
+                            </div>
+                            <div id="sbar-tab-content-r" class="sbar-tab-content" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Recommendation (R):</strong>
+                                <span id="sbar-recommendation">-</span>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                                <h4 style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.75rem;">Clinical References</h4>
+                                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.82rem;">
+                                    <li><a href="#" onclick="switchTab('pharmacology'); selectReference('val'); return false;" style="color: var(--primary); text-decoration: none; font-weight: 500;">🧪 View Lab Ranges</a></li>
+                                    <li><a href="#" onclick="switchTab('pharmacology'); selectReference('calc'); return false;" style="color: var(--secondary); text-decoration: none; font-weight: 500;">🧮 Dosage Calculators</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
 
-                    <!-- Right Simulation Dashboard -->
-                    <div class="active-sim-panel">
-                        <!-- Glowing Hospital Patient Monitor -->
-                        <div class="patient-monitor">
-                            <div class="monitor-alarm-banner" id="monitor-alarm">🚨 PATIENT UNSTABLE - ACTION REQUIRED 🚨</div>
-                            <div class="monitor-waveforms">
-                                <div class="waveform-channel">
-                                    <span class="waveform-label green">ECG (II)</span>
-                                    <canvas id="ecg-canvas" class="waveform-canvas"></canvas>
-                                </div>
-                                <div class="waveform-channel">
-                                    <span class="waveform-label blue">SpO2 Pleth</span>
-                                    <canvas id="spo2-canvas" class="waveform-canvas"></canvas>
+                    <!-- Center Pane: Workspace & Decisions -->
+                    <main class="lab-panel center-pane">
+                        <div class="lab-panel-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                </svg>
+                                Clinical Workspace
+                            </h3>
+                            <span class="badge-outline" id="lab-step-counter" style="font-size: 0.75rem; border-color: var(--primary); color: var(--primary);">Lab Ready</span>
+                        </div>
+                        <div class="lab-panel-body">
+                            <div class="workspace-scenario-section">
+                                <h4 id="scenario-title" style="margin-bottom: 0.5rem; color: white; font-size: 1.15rem;">Department Case Study</h4>
+                                <p id="scenario-text">Select a clinical lab rotation from the right panel and click 'Start Lab Simulation' to begin. You will act as the nurse and make priority decisions that affect the patient's vitals monitor in real time.</p>
+                            </div>
+                            
+                            <div class="workspace-actions-section" id="decision-box" style="display: none;">
+                                <h4 style="margin-bottom: 1rem; color: white; font-size: 0.95rem; font-weight: 600;">Select your next clinical action command:</h4>
+                                <div id="decision-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <!-- Options generated dynamically -->
                                 </div>
                             </div>
-                            <div class="monitor-vitals">
-                                <div class="vital-readout hr">
-                                    <span class="vital-name">HR</span>
-                                    <div>
-                                        <span class="vital-number" id="vital-hr">72</span>
-                                        <span class="vital-unit">bpm</span>
+                            
+                            <div style="margin-top: 1.5rem; display: flex; justify-content: center;" id="start-sim-container">
+                                <button class="btn-primary" id="btn-start-sim" onclick="startActualCase()" style="padding: 1rem 2rem;">Start Lab Simulation</button>
+                            </div>
+                        </div>
+                    </main>
+
+                    <!-- Right Pane: Vitals Monitor & Lab ROTATIONS Picker -->
+                    <aside class="lab-panel right-pane">
+                        <div class="lab-panel-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                                </svg>
+                                Monitor & Rotations
+                            </h3>
+                        </div>
+                        <div class="lab-panel-body" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
+                            <!-- Glowing Vitals Monitor -->
+                            <div class="patient-monitor" style="border-radius: 0; border: none; border-bottom: 1px solid var(--border-color); height: 210px; min-height: 210px;">
+                                <div class="monitor-alarm-banner" id="monitor-alarm" style="font-size: 0.75rem; padding: 0.25rem;">🚨 UNSTABLE VITALS 🚨</div>
+                                <div class="monitor-waveforms" style="padding: 0.4rem; height: 110px;">
+                                    <div class="waveform-channel" style="height: 48px;">
+                                        <span class="waveform-label green" style="font-size: 0.6rem;">ECG</span>
+                                        <canvas id="ecg-canvas" class="waveform-canvas" style="height: 100%;"></canvas>
+                                    </div>
+                                    <div class="waveform-channel" style="height: 48px; margin-top: 0.3rem;">
+                                        <span class="waveform-label blue" style="font-size: 0.6rem;">SpO2</span>
+                                        <canvas id="spo2-canvas" class="waveform-canvas" style="height: 100%;"></canvas>
                                     </div>
                                 </div>
-                                <div class="vital-readout bp">
-                                    <span class="vital-name">BP</span>
-                                    <div>
-                                        <span class="vital-number" id="vital-bp">120/80</span>
-                                        <span class="vital-unit">mmHg</span>
-                                    </div>
+                                <div class="monitor-vitals" style="border-top: 1px solid #1f2937; padding: 0.4rem; grid-template-columns: repeat(3, 1fr);">
+                                    <div class="vital-readout hr"><span class="vital-name" style="font-size: 0.6rem;">HR</span><div><span class="vital-number" id="vital-hr" style="font-size: 1.25rem;">72</span><span class="vital-unit" style="font-size: 0.55rem;">bpm</span></div></div>
+                                    <div class="vital-readout bp"><span class="vital-name" style="font-size: 0.6rem;">BP</span><div><span class="vital-number" id="vital-bp" style="font-size: 0.82rem; line-height: 1.8;">120/80</span></div></div>
+                                    <div class="vital-readout spo2"><span class="vital-name" style="font-size: 0.6rem;">SpO2</span><div><span class="vital-number" id="vital-spo2" style="font-size: 1.25rem;">98</span><span class="vital-unit" style="font-size: 0.55rem;">%</span></div></div>
                                 </div>
-                                <div class="vital-readout spo2">
-                                    <span class="vital-name">SpO2</span>
-                                    <div>
-                                        <span class="vital-number" id="vital-spo2">98</span>
-                                        <span class="vital-unit">%</span>
-                                    </div>
+                            </div>
+                            
+                            <!-- Rotations Menu list inside diagnostics right column -->
+                            <div style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+                                <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.15);"><h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em;">Rotations</h4></div>
+                                <div style="flex-grow: 1; overflow-y: auto; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;" id="sim-dept-panel">
+                                    <!-- Filled dynamically by JS -->
                                 </div>
                             </div>
                         </div>
-
-                        <!-- Main Play Area -->
-                        <div class="sim-work-grid">
-                            <!-- Case text and choices -->
-                            <div class="sim-case-details glass-card">
-                                <div class="case-scenario-card">
-                                    <h3 id="scenario-title">Department Case Study</h3>
-                                    <p id="scenario-text">Select a department on the left and click 'Start Simulation' to begin a clinical case study. You will act as the nurse and make decisions that dynamically affect the patient's condition.</p>
-                                </div>
-                                <div class="sim-decision-box" id="decision-box" style="display: none;">
-                                    <h4>What is your next nursing action?</h4>
-                                    <div class="decision-options" id="decision-options">
-                                        <!-- Buttons dynamically generated -->
-                                    </div>
-                                </div>
-                                <div style="margin-top: 1rem; display: flex; justify-content: center;" id="start-sim-container">
-                                    <button class="btn-primary" id="btn-start-sim" onclick="startActualCase()">Start Clinical Simulation</button>
-                                </div>
-                            </div>
-
-                            <!-- SBAR tool summary panel -->
-                            <div class="glass-card">
-                                <h3 class="card-title">Nurse SBAR Handover</h3>
-                                <div class="sbar-container" id="sbar-box">
-                                    <div class="sbar-section s">
-                                        <div class="sbar-title">Situation</div>
-                                        <div class="sbar-content" id="sbar-situation">No active simulation.</div>
-                                    </div>
-                                    <div class="sbar-section b">
-                                        <div class="sbar-title">Background</div>
-                                        <div class="sbar-content" id="sbar-background">-</div>
-                                    </div>
-                                    <div class="sbar-section a">
-                                        <div class="sbar-title">Assessment</div>
-                                        <div class="sbar-content" id="sbar-assessment">-</div>
-                                    </div>
-                                    <div class="sbar-section r">
-                                        <div class="sbar-title">Recommendation</div>
-                                        <div class="sbar-content" id="sbar-recommendation">-</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    </aside>
                 </div>
             </section>
 
-            <!-- NCLEX PREP TAB -->
+            <!-- SKILL IQ ASSESSMENTS (NCLEX) TAB -->
             <section id="nclex" class="tab-content">
-                <div class="quiz-container">
-                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;" id="quiz-filter-bar">
-                        <select id="nclex-category-select" class="calc-field" onchange="loadQuestionsByCategory(true)" style="flex-grow: 1; padding: 0.75rem; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: white;">
-                            <option value="all">All Categories (Standard Quiz)</option>
+                <!-- VIEW 1: LANDING/WELCOME PAGE -->
+                <div id="skill-iq-welcome-view" class="assessment-welcome-wrapper">
+                    <span class="assessment-welcome-badge">Skill IQ</span>
+                    <h2>Measure your Nursing Readiness Skill IQ</h2>
+                    <p>Find out where you stand in clinical judgment, safety, and pharmacology. This 5-question adaptive assessment determines your Skill IQ level (0-300) and compares your rank against national nursing cohorts.</p>
+                    
+                    <div class="assessment-criteria-grid">
+                        <div class="criteria-item">
+                            <strong>5 Questions</strong>
+                            <span>Adaptive difficulty</span>
+                        </div>
+                        <div class="criteria-item">
+                            <strong>Timed Exam</strong>
+                            <span>60s per question</span>
+                        </div>
+                        <div class="criteria-item">
+                            <strong>Skill Benchmark</strong>
+                            <span>Novice, Proficient, Expert</span>
+                        </div>
+                    </div>
+
+                    <div style="max-width: 400px; margin: 0 auto 2rem;">
+                        <label style="display: block; text-align: left; margin-bottom: 0.5rem; font-size: 0.85rem; color: var(--text-secondary);">Select Assessment Domain Focus</label>
+                        <select id="nclex-category-select" class="calc-field" style="width: 100%; padding: 0.85rem; border-radius: 10px; background: var(--bg-dark); border: 1px solid var(--border-color); color: white;">
+                            <option value="all">All Domain Focus (Standard Quiz)</option>
                             <option value="Pharmacological and Parenteral Therapies">Pharmacological Therapies</option>
                             <option value="Reduction of Risk Potential">Reduction of Risk Potential</option>
                             <option value="Physiological Adaptation">Physiological Adaptation</option>
@@ -657,8 +687,20 @@
                         </select>
                     </div>
 
-                    <div class="glass-card question-card">
-                        <div class="question-category" id="nclex-category">Safe and Effective Care Environment</div>
+                    <button class="btn-primary" onclick="startSkillIQAssessment()" style="padding: 1rem 2.5rem; font-size: 1rem; width: 100%; max-width: 400px;">Start Assessment</button>
+                </div>
+
+                <!-- VIEW 2: ACTIVE QUESTION SCREEN -->
+                <div id="skill-iq-active-view" class="quiz-container" style="display: none;">
+                    <div class="assessment-timer-bar-container">
+                        <div id="skill-iq-timer-fill" class="assessment-timer-fill"></div>
+                    </div>
+                    
+                    <div class="glass-card question-card" style="margin-top: 0;">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem;">
+                            <div class="question-category" id="nclex-category" style="margin-bottom: 0;">Safe and Effective Care Environment</div>
+                            <span id="skill-iq-question-timer-lbl" style="font-family: var(--font-mono); font-size: 0.85rem; color: var(--warning); font-weight: 700;">60s</span>
+                        </div>
                         <div class="question-text" id="nclex-text">Loading question...</div>
                         
                         <div id="nclex-options">
@@ -684,6 +726,49 @@
                             <button class="btn-outline" id="btn-submit-nclex" onclick="submitNclexAnswer()">Submit Answer</button>
                             <button class="btn-primary" id="btn-next-nclex" style="display: none;" onclick="loadNextNclexQuestion()">Next Question</button>
                         </div>
+                    </div>
+                </div>
+
+                <!-- VIEW 3: RESULTS SCREEN -->
+                <div id="skill-iq-results-view" class="skill-iq-results-wrapper" style="display: none;">
+                    <span class="assessment-welcome-badge">Your Results</span>
+                    
+                    <div class="results-layout">
+                        <!-- Conic-gradient Score Wheel -->
+                        <div class="score-wheel-container">
+                            <svg class="score-wheel-svg" viewBox="0 0 120 120">
+                                <circle class="score-wheel-bg-circle" cx="60" cy="60" r="50"></circle>
+                                <circle id="score-wheel-fill" class="score-wheel-fill-circle" cx="60" cy="60" r="50" stroke-dasharray="314.16" stroke-dashoffset="314.16"></circle>
+                            </svg>
+                            <div class="score-wheel-center-text">
+                                <div class="score-num" id="results-score-num">185</div>
+                                <div class="score-label">Skill IQ</div>
+                                <span class="rating-level-pill proficient" id="results-rating-pill">Proficient</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics details -->
+                        <div class="results-stats-panel">
+                            <h3 id="results-title-header">Your Skill IQ is Proficient</h3>
+                            <p id="results-percentile-desc">You scored higher than 82% of nursing students in your cohort. This score demonstrates strong clinical judgment and ready safe practice capability.</p>
+                            
+                            <table class="subskills-table">
+                                <thead>
+                                    <tr>
+                                        <th>Skill Category</th>
+                                        <th>Standing</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-subskills-body">
+                                    <!-- Filled dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions-strip">
+                        <button class="btn-outline" onclick="resetSkillIQAssessment()">Retake Assessment</button>
+                        <button class="btn-primary" onclick="switchTab('dashboard')">View Path Library</button>
                     </div>
                 </div>
             </section>

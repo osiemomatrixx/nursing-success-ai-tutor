@@ -15,6 +15,8 @@ let quizQuestions = [];
 let currentQuizIndex = 0;
 let quizScoreCount = 0;
 let selectedPlan = localStorage.getItem('nursing_selected_plan') || 'weekly';
+let assessmentTimerInterval = null;
+let assessmentTimeLeft = 60;
 
 const DEPARTMENTS = [
     { id: 'er', name: 'Emergency Room (ER)', desc: 'Acute asthma exacerbation triage and stabilization.', premium: false },
@@ -570,25 +572,27 @@ function switchTab(tabName) {
     }, 160);
     
     if (tabName === 'dashboard') {
-        pageTitle.textContent = 'Clinical Dashboard';
-        pageSubtitle.textContent = "Welcome back, Student Nurse. Let's practice clinical judgment today.";
+        pageTitle.textContent = 'Path Library';
+        pageSubtitle.textContent = "Welcome back, Student Nurse. Select a structured learning path or clinical rotation below.";
         loadClinicalRotations();
+        updateDashboardProgressBars();
     } else if (tabName === 'simulation') {
-        pageTitle.textContent = 'Clinical Simulator';
-        pageSubtitle.textContent = 'Interactive virtual patient cases with real-time vital sign reactions.';
+        pageTitle.textContent = 'Interactive Labs';
+        pageSubtitle.textContent = 'Virtual patient lab environments with real-time clinical judgment feedback.';
         loadSimulationDepts();
     } else if (tabName === 'nclex') {
-        pageTitle.textContent = 'NCLEX Prep Center';
-        pageSubtitle.textContent = 'Practice Next-Generation NCLEX style questions with immediate rationales.';
+        pageTitle.textContent = 'Skill IQ Assessments';
+        pageSubtitle.textContent = 'Measure and benchmark your clinical judgment standings.';
+        resetSkillIQAssessment();
     } else if (tabName === 'pharmacology') {
-        pageTitle.textContent = 'Pharma & Labs Reference';
+        pageTitle.textContent = 'Reference Center';
         pageSubtitle.textContent = 'High-yield nursing references, lab values, and dosage calculators.';
     } else if (tabName === 'chat') {
-        pageTitle.textContent = 'AI Virtual Preceptor';
-        pageSubtitle.textContent = 'Discuss medical protocols and clarify clinical concepts with Preceptor Sarah, RN.';
+        pageTitle.textContent = 'AI Mentor Support';
+        pageSubtitle.textContent = 'Clarify nursing concepts and clinical protocols with Iris, your AI Tutor.';
     } else if (tabName === 'research') {
-        pageTitle.textContent = 'AI Clinical Research Lab';
-        pageSubtitle.textContent = 'Query PubMed and ClinicalTrials.gov with Agentic AI synthesis.';
+        pageTitle.textContent = 'Research Playground';
+        pageSubtitle.textContent = 'Query scientific literature and trial data with agentic synthesis.';
     }
 
     applyStaggeredReveal(tabName);
@@ -789,9 +793,9 @@ function renderSimulationStep() {
     
     step.options.forEach((opt, idx) => {
         const btn = document.createElement('button');
-        btn.className = 'option-btn';
+        btn.className = 'option-command-btn';
         btn.innerHTML = `
-            <div class="option-marker">${String.fromCharCode(65 + idx)}</div>
+            <div class="cmd-num">ACTION ${String.fromCharCode(65 + idx)}</div>
             <div>${opt.text}</div>
         `;
         btn.onclick = () => submitSimulationAction(idx);
@@ -1102,6 +1106,7 @@ function submitNclexAnswer() {
         return;
     }
     
+    clearInterval(assessmentTimerInterval);
     const q = quizQuestions[currentQuizIndex];
     const optionsDiv = document.getElementById('nclex-options');
     const optionEls = optionsDiv.querySelectorAll('.quiz-option');
@@ -1135,7 +1140,7 @@ function submitNclexAnswer() {
     btnNext.style.display = 'block';
     
     if (currentQuizIndex === quizQuestions.length - 1) {
-        btnNext.textContent = 'Finish Quiz';
+        btnNext.textContent = 'Finish Assessment';
     } else {
         btnNext.textContent = 'Next Question';
     }
@@ -1148,22 +1153,22 @@ function loadNextNclexQuestion() {
         const countText = select.value === 'mock_exam' ? 'Mock Exam' : 'Question';
         document.getElementById('quiz-question-counter').textContent = `${countText} ${currentQuizIndex + 1} of ${quizQuestions.length}`;
         renderQuizQuestion();
+        startQuestionTimer();
     } else {
         const scorePct = Math.round((quizScoreCount / quizQuestions.length) * 100);
-        alert(`Quiz Finished! You scored ${quizScoreCount}/${quizQuestions.length} (${scorePct}%).`);
         
         let history = JSON.parse(localStorage.getItem('nclex_score_history') || '[75, 78, 80, 82]');
         history.push(scorePct);
         localStorage.setItem('nclex_score_history', JSON.stringify(history));
         
         if (lineChart) {
-            lineChart.data.labels.push(`Quiz ${lineChart.data.labels.length + 1}`);
+            lineChart.data.labels.push(`Assessment ${lineChart.data.labels.length + 1}`);
             lineChart.data.datasets[0].data.push(scorePct);
             lineChart.update();
         }
         
         updateNCLEXStats(history);
-        switchTab('dashboard');
+        showSkillIQResults(scorePct);
     }
 }
 
@@ -1521,10 +1526,10 @@ function initCharts() {
                 label: 'Success Probability %',
                 data: scoreHistory,
                 fill: true,
-                backgroundColor: 'rgba(123, 44, 191, 0.15)',
-                borderColor: '#7b2cbf',
+                backgroundColor: 'rgba(131, 56, 236, 0.15)',
+                borderColor: '#8338ec',
                 tension: 0.4,
-                pointBackgroundColor: '#9d4edd',
+                pointBackgroundColor: '#c084fc',
                 pointBorderColor: '#fff',
                 borderWidth: 2.5
             }]
@@ -1575,22 +1580,23 @@ function updateDashboardBenchmarks() {
         }
     });
 
-    const benchmarkScoreEl = document.getElementById('benchmark-ready-score');
-    const benchmarkCountEl = document.getElementById('benchmark-module-count');
-    if (benchmarkScoreEl) benchmarkScoreEl.textContent = `${avgScore}%`;
-    if (benchmarkCountEl) benchmarkCountEl.textContent = `${completedCount} / ${DEPARTMENTS.length}`;
+    let currentIq = parseInt(localStorage.getItem('nursing_skill_iq_score') || '', 10);
+    if (Number.isNaN(currentIq) || currentIq <= 0) {
+        currentIq = Math.round(avgScore * 2.25);
+        localStorage.setItem('nursing_skill_iq_score', String(currentIq));
+    }
+
+    const headerScore = document.getElementById('header-nclex-score');
+    const dashScore = document.getElementById('dashboard-skill-iq-val');
+    if (headerScore) headerScore.textContent = currentIq;
+    if (dashScore) dashScore.textContent = currentIq;
+
+    updateDashboardProgressBars(currentIq);
 
     const competencyAverage = Math.round(DEPARTMENTS.reduce((sum, dept) => {
         const defaultValue = dept.id === 'leadership' ? 35 : dept.id === 'pathophysiology' ? 30 : 50;
         return sum + (parseInt(localStorage.getItem(`competency_${dept.id}`), 10) || defaultValue);
     }, 0) / DEPARTMENTS.length);
-
-    const priorityValue = Math.min(100, Math.round((avgScore * 0.55) + (completedCount * 4)));
-    const pharmValue = Math.min(100, Math.round((avgScore * 0.5) + (completedCount * 3)));
-
-    setPathwayMetric('clinical', competencyAverage);
-    setPathwayMetric('priority', priorityValue);
-    setPathwayMetric('pharm', pharmValue);
 }
 
 function setPathwayMetric(key, value) {
@@ -1799,7 +1805,7 @@ function renderResearchChart(trials, articles) {
                 label: 'Trial Statuses',
                 data: trialCounts,
                 backgroundColor: 'rgba(255, 186, 8, 0.4)',
-                borderColor: '#ffba08',
+                borderColor: '#ffd166',
                 borderWidth: 1.5
             }]
         },
@@ -1826,3 +1832,310 @@ function renderResearchChart(trials, articles) {
     
     summaryEl.innerHTML = `Retrieved <strong>${trials.length}</strong> active clinical trials and <strong>${articles.length}</strong> medical articles. Chart shows trial status distribution.`;
 }
+
+/* ==========================================================================
+   PLURALSIGHT WORKFLOW HELPER METHODS
+   ========================================================================== */
+
+function switchSbarTab(tabId) {
+    const tabButtons = document.querySelectorAll('.sbar-tab-btn');
+    tabButtons.forEach(btn => {
+        const onclickAttr = btn.getAttribute('onclick');
+        if (onclickAttr && onclickAttr.includes(`'${tabId}'`)) {
+            btn.classList.add('active');
+        } else {
+            btn.classList.remove('active');
+        }
+    });
+
+    const tabContents = document.querySelectorAll('.sbar-tab-content');
+    tabContents.forEach(content => {
+        if (content.id === `sbar-tab-content-${tabId}`) {
+            content.classList.add('active');
+        } else {
+            content.classList.remove('active');
+        }
+    });
+}
+
+function startSkillIQAssessment() {
+    const select = document.getElementById('nclex-category-select');
+    if (!select) return;
+    const category = select.value;
+    
+    if (category === 'mock_exam' && !isPremium) {
+        alert('🔒 The Comprehensive Mock Exam is a Premium feature. Please subscribe to unlock.');
+        select.value = 'all';
+        return;
+    }
+
+    document.getElementById('skill-iq-welcome-view').style.display = 'none';
+    document.getElementById('skill-iq-active-view').style.display = 'block';
+    document.getElementById('skill-iq-results-view').style.display = 'none';
+
+    loadQuestionsByCategorySilent(category, 5);
+}
+
+async function loadQuestionsByCategorySilent(category, count) {
+    const apiKey = localStorage.getItem('nursing_openai_key') || '';
+    
+    try {
+        let url = '/api/questions';
+        const params = new URLSearchParams();
+        if (category !== 'all') {
+            params.set('category', category);
+        }
+        params.set('count', String(count));
+        if (apiKey) {
+            params.set('api_key', apiKey);
+        }
+        url += `?${params.toString()}`;
+        const res = await fetch(url);
+        if (!res.ok) throw new Error("Fetch failed");
+        const data = await res.json();
+        
+        quizQuestions = data;
+        currentQuizIndex = 0;
+        quizScoreCount = 0;
+        
+        document.getElementById('quiz-question-counter').textContent = `Question 1 of ${quizQuestions.length}`;
+        renderQuizQuestion();
+        startQuestionTimer();
+    } catch (err) {
+        console.error(err);
+        // Fallback to local high-quality mock questions if API is offline
+        quizQuestions = [
+            {
+                category: "Safe and Effective Care Environment",
+                question: "A nurse is preparing to delegate tasks to an unlicensed assistive personnel (UAP). Which task is most appropriate for the nurse to delegate?",
+                options: [
+                    "Performing an admission skin assessment on a new patient.",
+                    "Administering a scheduled oral medication to a stable patient.",
+                    "Assisting a stable patient with ambulating in the hallway.",
+                    "Providing discharge teaching to a patient going home."
+                ],
+                correctIndex: 2,
+                rationale: "Ambulating a stable patient is within the scope of a UAP. Assessments, teaching, and medication administration require clinical judgment and must be performed by licensed nursing staff."
+            },
+            {
+                category: "Pharmacological and Parenteral Therapies",
+                question: "A patient is receiving an intravenous infusion of heparin. Which laboratory value should the nurse monitor to adjust the heparin infusion rate?",
+                options: [
+                    "Prothrombin time (PT)",
+                    "Activated partial thromboplastin time (aPTT)",
+                    "International normalized ratio (INR)",
+                    "Platelet count"
+                ],
+                correctIndex: 1,
+                rationale: "Activated partial thromboplastin time (aPTT) is used to monitor heparin efficacy and guide dose titrations. PT/INR is used to monitor warfarin therapy."
+            },
+            {
+                category: "Physiological Adaptation",
+                question: "A patient with a history of heart failure presents with shortness of breath, lung crackles, and jugular venous distention. Which medication is the priority to administer?",
+                options: [
+                    "Atenolol",
+                    "Furosemide",
+                    "Lisinopril",
+                    "Spironolactone"
+                ],
+                correctIndex: 1,
+                rationale: "The patient is experiencing fluid volume overload (crackles, JVD). Furosemide, a loop diuretic, is the priority drug to rapidly promote fluid excretion and reduce pulmonary congestion."
+            },
+            {
+                category: "Reduction of Risk Potential",
+                question: "A nurse is caring for a patient post-op day 1 abdominal surgery. Which intervention is most effective for preventing deep vein thrombosis (DVT)?",
+                options: [
+                    "Massaging the patient's calves twice daily.",
+                    "Encouraging early and frequent ambulation.",
+                    "Keeping the patient's knees in a flexed position.",
+                    "Limiting fluid intake to 1000 mL per day."
+                ],
+                correctIndex: 1,
+                rationale: "Early ambulation is the single most effective intervention to promote venous return and prevent venous stasis/DVT. Calf massage and knee flexion are contraindicated."
+            },
+            {
+                category: "Leadership",
+                question: "A nurse is delegating care tasks for a shift. Which client should be assigned to the most experienced nurse on the unit?",
+                options: [
+                    "A client undergoing a routine postoperative recovery who is stable.",
+                    "A client with chronic COPD receiving continuous oxygen at 2 L/min.",
+                    "A client newly diagnosed with type 1 diabetes requiring insulin teaching.",
+                    "A client admitted 2 hours ago with crushing chest pain and ST-segment elevation."
+                ],
+                correctIndex: 3,
+                rationale: "Crushing chest pain and ST elevation indicates acute MI. This client is hemodynamically unstable and requires advanced assessment and rapid intervention by the most experienced RN."
+            }
+        ];
+        currentQuizIndex = 0;
+        quizScoreCount = 0;
+        document.getElementById('quiz-question-counter').textContent = `Question 1 of ${quizQuestions.length}`;
+        renderQuizQuestion();
+        startQuestionTimer();
+    }
+}
+
+function startQuestionTimer() {
+    clearInterval(assessmentTimerInterval);
+    assessmentTimeLeft = 60;
+    
+    const timerFill = document.getElementById('skill-iq-timer-fill');
+    const timerLbl = document.getElementById('skill-iq-question-timer-lbl');
+    
+    if (timerFill) timerFill.style.width = '100%';
+    if (timerLbl) timerLbl.textContent = '60s';
+    
+    assessmentTimerInterval = setInterval(() => {
+        assessmentTimeLeft--;
+        if (timerLbl) timerLbl.textContent = `${assessmentTimeLeft}s`;
+        if (timerFill) {
+            const pct = (assessmentTimeLeft / 60) * 100;
+            timerFill.style.width = `${pct}%`;
+        }
+        
+        if (assessmentTimeLeft <= 0) {
+            clearInterval(assessmentTimerInterval);
+            handleQuestionTimeout();
+        }
+    }, 1000);
+}
+
+function handleQuestionTimeout() {
+    alert("⏰ Time is up for this question!");
+    if (selectedOptionIndex === null) {
+        selectedOptionIndex = 0; // select first option as fallback
+    }
+    submitNclexAnswer();
+}
+
+function showSkillIQResults(scorePct) {
+    clearInterval(assessmentTimerInterval);
+    
+    document.getElementById('skill-iq-welcome-view').style.display = 'none';
+    document.getElementById('skill-iq-active-view').style.display = 'none';
+    document.getElementById('skill-iq-results-view').style.display = 'flex';
+    
+    let skillIqVal = 185; 
+    if (scorePct === 100) skillIqVal = 285;
+    else if (scorePct >= 80) skillIqVal = 230;
+    else if (scorePct >= 60) skillIqVal = 175;
+    else if (scorePct >= 40) skillIqVal = 120;
+    else if (scorePct >= 20) skillIqVal = 65;
+    else skillIqVal = 25;
+    
+    let rating = 'Proficient';
+    let ratingClass = 'proficient';
+    let strokeColor = '#8338ec'; 
+    let percentile = 82;
+    let description = '';
+    
+    if (skillIqVal >= 200) {
+        rating = 'Expert';
+        ratingClass = 'expert';
+        strokeColor = '#00f5d4'; 
+        percentile = Math.round(90 + (skillIqVal - 200) / 10);
+        description = `You scored higher than ${percentile}% of nursing students in Cohort A. This score demonstrates superior clinical judgment, excellent pharmacology safety management, and rapid priority decision skills. You are highly ready for clinical placement.`;
+    } else if (skillIqVal >= 100) {
+        rating = 'Proficient';
+        ratingClass = 'proficient';
+        strokeColor = '#c084fc'; 
+        percentile = Math.round(50 + (skillIqVal - 100) * 0.4);
+        description = `You scored higher than ${percentile}% of nursing students in Cohort A. This score demonstrates solid foundational competency, ready safe practice skills, and good patient safety management. Focus on pharmacology to reach the Expert level.`;
+    } else {
+        rating = 'Novice';
+        ratingClass = 'novice';
+        strokeColor = '#64748b'; 
+        percentile = Math.round(10 + skillIqVal * 0.4);
+        description = `You scored higher than ${percentile}% of nursing students in Cohort A. This score suggests opportunities for improvement in delegation, critical care, and safety guidelines. We recommend revising the core learning paths before re-assessing.`;
+    }
+    
+    document.getElementById('results-score-num').textContent = skillIqVal;
+    
+    const pill = document.getElementById('results-rating-pill');
+    if (pill) {
+        pill.textContent = rating;
+        pill.className = `rating-level-pill ${ratingClass}`;
+    }
+    
+    const header = document.getElementById('results-title-header');
+    if (header) header.textContent = `Your Skill IQ is ${rating}`;
+    
+    const desc = document.getElementById('results-percentile-desc');
+    if (desc) desc.textContent = description;
+    
+    const circle = document.getElementById('score-wheel-fill');
+    if (circle) {
+        circle.style.stroke = strokeColor;
+        const circumference = 2 * Math.PI * 50; 
+        const offset = circumference * (1 - (skillIqVal / 300));
+        circle.style.strokeDashoffset = offset;
+    }
+    
+    const tableBody = document.getElementById('results-subskills-body');
+    if (tableBody) {
+        tableBody.innerHTML = `
+            <tr>
+                <td>Safe Care Environment</td>
+                <td class="${scorePct >= 80 ? 'level-high' : 'level-med'}">${scorePct >= 80 ? 'Expert' : 'Proficient'}</td>
+            </tr>
+            <tr>
+                <td>Pharmacological Therapies</td>
+                <td class="${scorePct >= 60 ? 'level-med' : 'level-low'}">${scorePct >= 60 ? 'Proficient' : 'Novice'}</td>
+            </tr>
+            <tr>
+                <td>Physiological Adaptation</td>
+                <td class="${scorePct >= 100 ? 'level-high' : 'level-med'}">${scorePct >= 100 ? 'Expert' : 'Proficient'}</td>
+            </tr>
+            <tr>
+                <td>Clinical Judgment Speed</td>
+                <td class="${assessmentTimeLeft > 30 ? 'level-high' : 'level-med'}">${assessmentTimeLeft > 30 ? 'High' : 'Medium'}</td>
+            </tr>
+        `;
+    }
+    
+    localStorage.setItem('nursing_skill_iq_score', String(skillIqVal));
+    localStorage.setItem('nursing_skill_iq_rating', rating);
+    
+    const headerScore = document.getElementById('header-nclex-score');
+    if (headerScore) headerScore.textContent = skillIqVal;
+    
+    const dashScore = document.getElementById('dashboard-skill-iq-val');
+    if (dashScore) dashScore.textContent = skillIqVal;
+    
+    updateDashboardProgressBars(skillIqVal);
+}
+
+function resetSkillIQAssessment() {
+    clearInterval(assessmentTimerInterval);
+    document.getElementById('skill-iq-welcome-view').style.display = 'block';
+    document.getElementById('skill-iq-active-view').style.display = 'none';
+    document.getElementById('skill-iq-results-view').style.display = 'none';
+}
+
+function updateDashboardProgressBars(skillIqVal = null) {
+    const currentIq = skillIqVal || parseInt(localStorage.getItem('nursing_skill_iq_score') || '185', 10);
+    
+    const nclexPct = Math.round((currentIq / 300) * 100);
+    const nclexLbl = document.getElementById('path-nclex-progress-lbl');
+    const nclexFill = document.getElementById('path-nclex-progress-fill');
+    if (nclexLbl) nclexLbl.textContent = `${nclexPct}%`;
+    if (nclexFill) nclexFill.style.width = `${nclexPct}%`;
+    
+    let completedCount = 0;
+    DEPARTMENTS.forEach((dept) => {
+        if (localStorage.getItem(`sim_completed_${dept.id}`) === 'true') {
+            completedCount++;
+        }
+    });
+    const rotationsPct = Math.round((completedCount / DEPARTMENTS.length) * 100);
+    const rotationsLbl = document.getElementById('path-rotations-progress-lbl');
+    const rotationsFill = document.getElementById('path-rotations-progress-fill');
+    if (rotationsLbl) rotationsLbl.textContent = `${rotationsPct}%`;
+    if (rotationsFill) rotationsFill.style.width = `${rotationsPct}%`;
+    
+    const pharmPct = 60; 
+    const pharmLbl = document.getElementById('path-pharm-progress-lbl');
+    const pharmFill = document.getElementById('path-pharm-progress-fill');
+    if (pharmLbl) pharmLbl.textContent = `${pharmPct}%`;
+    if (pharmFill) pharmFill.style.width = `${pharmPct}%`;
+}
+
