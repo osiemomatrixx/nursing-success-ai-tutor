@@ -1,0 +1,997 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — Nursing Clinical Simulator & NCLEX Prep Platform</title>
+    <meta name="description" content="AI-powered nursing education platform with clinical simulations, NCLEX prep, pharmacology reference, and an AI virtual preceptor. Train across 8 clinical departments with real-time patient monitoring.">
+    <meta name="keywords" content="NCLEX prep, nursing simulation, clinical judgment, AI tutor, nursing education, SBAR, pharmacology, nurse preceptor">
+    <meta property="og:title" content="Preceptor AI — Nursing Clinical Simulator & NCLEX Prep">
+    <meta property="og:description" content="Build clinical judgment with AI-powered simulations, adaptive NCLEX practice, and a virtual nurse preceptor.">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="/static/assets/nursing_hero.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Preceptor AI — Nursing Success">
+    <meta name="twitter:description" content="AI-powered nursing clinical education and NCLEX preparation.">
+    <meta name="theme-color" content="#0a0e17">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Chart.js CDN for visual graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <!-- USER LOGIN OVERLAY -->
+    <div id="login-overlay" class="auth-overlay">
+        <div class="auth-shell">
+            <aside class="auth-panel glass-card">
+                <div class="auth-panel-brand">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="logo-text">Preceptor AI</h2>
+                        <span class="logo-sub">Nursing Success</span>
+                    </div>
+                </div>
+                <h3 class="auth-panel-title">Nursing Readiness Command Center</h3>
+                <p class="auth-panel-copy">Build clinical judgment, confidence, and NCLEX precision through structured simulation and measurable progression.</p>
+                <img src="/static/assets/nursing_hero.png" alt="AI-powered nursing education" style="width: 100%; border-radius: 14px; margin: 1rem 0; border: 1px solid var(--border-color); opacity: 0.9;">
+                <div class="auth-panel-metrics">
+                    <div>
+                        <span>Institutional benchmark</span>
+                        <strong>92% confidence lift</strong>
+                    </div>
+                    <div>
+                        <span>Active learner network</span>
+                        <strong>4,200+ students</strong>
+                    </div>
+                    <div>
+                        <span>Practice architecture</span>
+                        <strong>8 clinical domains</strong>
+                    </div>
+                </div>
+                <div class="trust-badges">
+                    <span class="trust-badge">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        NCLEX Blueprint Aligned
+                    </span>
+                    <span class="trust-badge">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        Evidence-Based Content
+                    </span>
+                    <span class="trust-badge">
+                        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+                        HIPAA-Aware Design
+                    </span>
+                </div>
+            </aside>
+
+            <div class="auth-card glass-card" style="max-width: 500px; width: 100%; transition: all 0.3s ease;">
+                <div class="logo-container" style="justify-content: center; margin-bottom: 1.5rem;">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="logo-text">Preceptor AI</h2>
+                        <span class="logo-sub">Nursing Success</span>
+                    </div>
+                </div>
+
+                <!-- SIGN IN VIEW -->
+                <div id="signin-view">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.4rem;">Sign In to AI Tutor</h3>
+                    <div class="auth-proof-strip">
+                        <div class="proof-stat">
+                            <span class="proof-value" id="proof-pass-rate">92%</span>
+                            <span class="proof-label">NCLEX confidence lift</span>
+                        </div>
+                        <div class="proof-stat">
+                            <span class="proof-value" id="proof-active-learners">4,200+</span>
+                            <span class="proof-label">active nursing learners</span>
+                        </div>
+                    </div>
+                    <div class="auth-social-proof">
+                        <p id="auth-proof-quote">"I stopped second-guessing priority questions after one week of simulations."</p>
+                        <span id="auth-proof-author">- Senior Nursing Student, Boston</span>
+                    </div>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Student Email</label>
+                            <input type="email" id="login-email" required placeholder="student@nursing.edu">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Password</label>
+                            <input type="password" id="login-password" required placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">Access AI Platform</button>
+                        <button type="button" class="btn-outline" style="width: 100%; margin-top: 0.75rem; padding: 0.95rem;" onclick="useDemoLogin()">Try Instant Demo Access</button>
+                    </form>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 1.5rem;">
+                        Don't have an account? <a href="#" onclick="toggleAuthView('register')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Register here</a>
+                    </p>
+                    <p style="text-align: center; font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                        Demo Account: <strong>student@nursing.edu</strong> / <strong>password</strong>
+                    </p>
+                </div>
+
+                <!-- REGISTER VIEW -->
+                <div id="register-view" style="display: none;">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.4rem;">Student Registration</h3>
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="register-name" required placeholder="Jane Doe">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Residential Address</label>
+                            <input type="text" id="register-address" required placeholder="123 Care Street, Boston, MA">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Email Address</label>
+                            <input type="email" id="register-email" required placeholder="student@nursing.edu">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Nursing Course / Study Track</label>
+                            <select id="register-course" style="width: 100%; padding: 0.75rem; border-radius: 8px; background: rgba(10, 15, 30, 0.6); border: 1px solid var(--border-color); color: white; font-family: inherit; font-size: 0.9rem; outline: none;">
+                                <option value="BSN - Bachelor of Science in Nursing">BSN - Bachelor in Nursing</option>
+                                <option value="ADN - Associate Degree in Nursing">ADN - Associate in Nursing</option>
+                                <option value="NCLEX Prep Fast Track">NCLEX Prep Fast Track</option>
+                                <option value="LPN to BSN Transition">LPN to BSN Transition</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Password</label>
+                            <input type="password" id="register-password" required placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">Register & Send Confirmation</button>
+                    </form>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 1.5rem;">
+                        Already have an account? <a href="#" onclick="toggleAuthView('signin')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign In here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="auth-overlay-footer">
+            © 2026 Preceptor AI &bull; <a href="#">Privacy Policy</a> &bull; <a href="#">Terms of Service</a> &bull; Built for nursing students, by nursing professionals
+        </div>
+    </div>
+
+    <!-- SUBSCRIPTION BILLING GATE MODAL -->
+    <div id="subscription-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card glass-card">
+            <button class="modal-close" onclick="closeSubscriptionModal()">×</button>
+            <h2 style="color: var(--primary); text-align: center; margin-bottom: 0.5rem; font-size: 1.75rem;">Unlock Premium AI Tutor</h2>
+            <p style="text-align: center; color: var(--text-secondary); margin-bottom: 2rem; font-size: 0.95rem;">
+                Get access to advanced clinical rotations, detailed pathophysiology cases, and the comprehensive NCLEX mock exam engine.
+            </p>
+            
+            <div class="plans-grid">
+                <div class="plan-card active" onclick="selectPlan('weekly')">
+                    <span class="plan-badge">Popular</span>
+                    <h3>Weekly Plan</h3>
+                    <div class="plan-price">$7 <span>/ week</span></div>
+                    <p>Perfect for quick study sprints before your NCLEX exam date.</p>
+                </div>
+                <div class="plan-card" onclick="selectPlan('monthly')">
+                    <h3>Monthly Plan</h3>
+                    <div class="plan-price">$7 <span>/ month</span></div>
+                    <p>Best value. Continuous learning across all 8 major departments.</p>
+                </div>
+            </div>
+            <p id="selected-plan-summary" class="selected-plan-summary">You selected Weekly Plan. Start now for $7 and cancel anytime.</p>
+
+            <div class="payment-form" style="margin-top: 2rem;">
+                <h4 style="margin-bottom: 1rem; font-size: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">Simulated Secure Checkout</h4>
+                <div class="form-group">
+                    <label>Cardholder Name</label>
+                    <input type="text" value="Student Nurse" disabled>
+                </div>
+                <div class="form-group" style="margin-top: 0.75rem;">
+                    <label>Card Number</label>
+                    <input type="text" placeholder="4242 •••• •••• 4242" value="4242 4242 4242 4242" disabled>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top: 0.75rem;">
+                    <div class="form-group">
+                        <label>Expiration Date</label>
+                        <input type="text" value="12/28" disabled>
+                    </div>
+                    <div class="form-group">
+                        <label>CVC</label>
+                        <input type="text" value="***" disabled>
+                    </div>
+                </div>
+                <button class="btn-primary" id="payment-button-text" onclick="simulatePayment()" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">
+                    Pay $7 and Activate Premium
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- SETTINGS / API KEY MODAL -->
+    <div id="settings-modal" class="modal-overlay" style="display: none;">
+        <div class="modal-card glass-card" style="max-width: 450px;">
+            <button class="modal-close" onclick="closeSettingsModal()">×</button>
+            <h2 style="color: var(--secondary); margin-bottom: 0.5rem;">AI Settings</h2>
+            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.85rem;">
+                Configure your OpenAI API Key to connect Nurse Preceptor Sarah to the live GPT model.
+            </p>
+            <p id="openai-status-text" style="margin-bottom: 1rem; font-size: 0.8rem; color: var(--text-secondary);">
+                Checking OpenAI connection status...
+            </p>
+            <div class="form-group">
+                <label>OpenAI API Key</label>
+                <input type="password" id="openai-key-input" placeholder="sk-proj-..." style="background: rgba(18, 26, 44, 0.4); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; width: 100%; color: white;">
+            </div>
+            <div class="form-group" style="margin-top: 0.75rem;">
+                <label>MCP Bridge URL</label>
+                <input type="text" id="mcp-bridge-input" placeholder="https://your-mcp-bridge.example/context" style="background: rgba(18, 26, 44, 0.4); border: 1px solid var(--border-color); padding: 0.75rem; border-radius: 8px; width: 100%; color: white;">
+            </div>
+            <p id="mcp-status-text" style="margin-top: 0.5rem; margin-bottom: 0.25rem; font-size: 0.8rem; color: var(--text-secondary);">
+                MCP bridge not configured.
+            </p>
+            <button class="btn-primary" onclick="saveSettings()" style="width: 100%; margin-top: 1.5rem;">Save Settings</button>
+        </div>
+    </div>
+
+    <!-- MOBILE SIDEBAR TOGGLE -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <!-- MAIN APP CONTAINER -->
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="logo-text">Preceptor AI</h2>
+                    <span class="logo-sub">Nursing Success</span>
+                </div>
+            </div>
+
+            <div class="sidebar-heading">Learning Workspace</div>
+
+            <nav class="nav-links">
+                <a class="nav-item active" data-tab="dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a class="nav-item" data-tab="simulation">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/>
+                    </svg>
+                    Clinical Simulations
+                </a>
+                <a class="nav-item" data-tab="nclex">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    NCLEX Prep
+                </a>
+                <a class="nav-item" data-tab="pharmacology">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4.5 16.5c-1.5 1.25-2.5 3-2.5 5h20c0-2-1-3.75-2.5-5"/>
+                        <path d="M12 2C6.5 2 2 6.5 2 12c0 3.5 1.8 6.6 4.5 8.4V16.5"/>
+                        <path d="M17.5 20.4c2.7-1.8 4.5-4.9 4.5-8.4 0-5.5-4.5-10-10-10"/>
+                        <circle cx="12" cy="11" r="3"/>
+                    </svg>
+                    Pharma & Labs
+                </a>
+                <a class="nav-item" data-tab="chat">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    AI Preceptor
+                </a>
+                <a class="nav-item" data-tab="research">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    AI Research Lab
+                </a>
+            </nav>
+
+            <div class="sidebar-footer" style="position: relative;">
+                <div class="user-avatar" id="sidebar-avatar">SN</div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h4 id="sidebar-username">Student Nurse</h4>
+                    <p id="subscription-status">Free Account</p>
+                </div>
+                <button class="settings-btn" onclick="openSettingsModal()" title="OpenAI API Settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Announcement Bar -->
+            <div class="announcement-bar" id="announcement-bar">
+                <span>🔬 <strong>New:</strong> AI Research Lab powered by GPT-4o &mdash; query PubMed & ClinicalTrials.gov with agentic synthesis across 8 clinical departments</span>
+                <button class="announcement-dismiss" onclick="dismissAnnouncement()" aria-label="Dismiss">&times;</button>
+            </div>
+
+            <header class="top-header">
+                <div class="welcome-section">
+                    <h1 id="page-title">Clinical Dashboard</h1>
+                    <p id="page-subtitle">Welcome back, Student Nurse. Let's practice clinical judgment today.</p>
+                    <div class="header-subline">
+                        <span>Structured progression</span>
+                        <span>Adaptive remediation</span>
+                        <span>Exam readiness tracking</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="header-clock" id="header-clock"></span>
+                    <div class="portal-meta">RN Pathway • Cohort A</div>
+                    <div class="badge-outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                        </svg>
+                        Quiz Score: <span id="header-nclex-score">82%</span>
+                    </div>
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(236, 0, 140, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                        💎 Go Premium ($7)
+                    </div>
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(123, 44, 191, 0.15); border-color: var(--accent); color: #c084fc;">
+                        👑 Premium active
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD TAB -->
+            <section id="dashboard" class="tab-content active">
+                <div class="grid-dashboard">
+                    <div class="glass-card col-12 sales-hero">
+                        <div class="sales-hero-main">
+                            <span class="sales-kicker">ATI-inspired mastery sequence</span>
+                            <h2>Study the way strong nursing programs measure readiness.</h2>
+                            <p>Use blueprint-aligned modules, clinical reasoning drills, and feedback loops that turn each session into measurable progress.</p>
+                            <div class="sales-hero-actions">
+                                <button class="btn-primary" onclick="switchTab('simulation')">Launch Clinical Drill</button>
+                                <button class="btn-outline" onclick="switchTab('nclex')">Run Readiness Quiz</button>
+                            </div>
+                        </div>
+                        <div class="sales-hero-aside">
+                            <div class="offer-chip">
+                                Next cohort pricing refresh in
+                                <strong id="offer-countdown">23:59:59</strong>
+                            </div>
+                            <ul>
+                                <li>Blueprint-aligned practice blocks and rationales</li>
+                                <li>Adaptive remediation after each decision</li>
+                                <li>Competency tracking for exam readiness</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="glass-card col-12 benchmark-strip">
+                        <div class="benchmark-item">
+                            <span class="benchmark-label">Program track</span>
+                            <strong class="benchmark-value">RN Readiness Intensive</strong>
+                        </div>
+                        <div class="benchmark-item">
+                            <span class="benchmark-label">Current readiness</span>
+                            <strong class="benchmark-value" id="benchmark-ready-score">82%</strong>
+                        </div>
+                        <div class="benchmark-item">
+                            <span class="benchmark-label">Clinical modules completed</span>
+                            <strong class="benchmark-value" id="benchmark-module-count">4 / 8</strong>
+                        </div>
+                        <div class="benchmark-item">
+                            <span class="benchmark-label">Recommended next block</span>
+                            <strong class="benchmark-value">Priority and Delegation</strong>
+                        </div>
+                    </div>
+
+                    <div class="glass-card col-8 pathway-card">
+                        <h3 class="card-title">Course Roadmap</h3>
+                        <p class="pathway-subtitle">Follow a staged path from foundations to exam simulation with visible progress at every step.</p>
+                        <div class="pathway-rows">
+                            <div class="pathway-row">
+                                <div class="pathway-text">
+                                    <span>Clinical Foundations</span>
+                                    <strong id="pathway-clinical-label">50%</strong>
+                                </div>
+                                <div class="pathway-progress">
+                                    <div class="pathway-progress-fill" id="pathway-clinical-fill" style="width: 50%;"></div>
+                                </div>
+                            </div>
+                            <div class="pathway-row">
+                                <div class="pathway-text">
+                                    <span>Priority and Delegation</span>
+                                    <strong id="pathway-priority-label">65%</strong>
+                                </div>
+                                <div class="pathway-progress">
+                                    <div class="pathway-progress-fill" id="pathway-priority-fill" style="width: 65%;"></div>
+                                </div>
+                            </div>
+                            <div class="pathway-row">
+                                <div class="pathway-text">
+                                    <span>Pharmacology and Safety</span>
+                                    <strong id="pathway-pharm-label">58%</strong>
+                                </div>
+                                <div class="pathway-progress">
+                                    <div class="pathway-progress-fill" id="pathway-pharm-fill" style="width: 58%;"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-card col-4 benchmark-callout">
+                        <h3 class="card-title">Today’s Study Plan</h3>
+                        <div class="study-plan-list">
+                            <div class="study-plan-item">
+                                <span class="study-plan-step">01</span>
+                                <div>
+                                    <strong>Complete one simulation</strong>
+                                    <p>Focus on a priority-driven case and review the SBAR summary.</p>
+                                </div>
+                            </div>
+                            <div class="study-plan-item">
+                                <span class="study-plan-step">02</span>
+                                <div>
+                                    <strong>Take a 5-question quiz</strong>
+                                    <p>Use rationales to identify your weakest blueprint area.</p>
+                                </div>
+                            </div>
+                            <div class="study-plan-item">
+                                <span class="study-plan-step">03</span>
+                                <div>
+                                    <strong>Review one remediation topic</strong>
+                                    <p>Target pharmacology or delegation based on your score trend.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="btn-primary" onclick="switchTab('simulation')" style="width: 100%; margin-top: 1rem;">Start Study Plan</button>
+                    </div>
+
+                    <!-- Competency Radar Graph -->
+                    <div class="glass-card col-6">
+                        <h3 class="card-title">Competency Map</h3>
+                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="radar-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Performance Score Line Graph -->
+                    <div class="glass-card col-6">
+                        <h3 class="card-title">Readiness Trend</h3>
+                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Performance Stats -->
+                    <div class="glass-card col-4">
+                        <h3 class="card-title">Completed Modules</h3>
+                        <div class="stat-value" id="stats-sim-count">4</div>
+                        <p class="stat-desc">Build toward 30 high-quality cases for a stronger clinical baseline.</p>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="badge-outline" style="font-size: 0.75rem;">ER</span>
+                            <span class="badge-outline" style="font-size: 0.75rem;">ICU</span>
+                            <span class="badge-outline" style="font-size: 0.75rem;">Peds</span>
+                            <span class="badge-outline" style="font-size: 0.75rem;">OB</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-medsurg">MedSurg</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-mental">Psych</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-leadership">Lead</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-pathophys">Patho</span>
+                        </div>
+                    </div>
+
+                    <!-- Daily Wisdom Mnemonic -->
+                    <div class="glass-card col-4">
+                        <h3 class="card-title" style="color: var(--warning);">
+                            Mnemonic of the Day
+                        </h3>
+                        <div style="margin-top: 0.5rem;">
+                            <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem;">MONA TASS</h4>
+                            <p style="font-size: 0.9rem; line-height: 1.5; color: var(--text-secondary);">
+                                <strong>Myocardial Infarction Management:</strong><br>
+                                <strong>M</strong>orphine, <strong>O</strong>xygen, <strong>N</strong>itroglycerin, <strong>A</strong>spirin.<br>
+                                <strong>T</strong>hrombolytics, <strong>A</strong>nticoagulants, <strong>S</strong>tool Softeners, <strong>S</strong>tatins.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Next Gen NCLEX Card -->
+                    <div class="glass-card col-4">
+                        <h3 class="card-title">NCLEX Prep Status</h3>
+                        <p style="margin-bottom: 1.5rem; line-height: 1.6; color: var(--text-secondary);">
+                            Your cumulative test score is <strong id="stats-nclex-score">82%</strong>. Take a quick quiz or start a comprehensive review.
+                        </p>
+                        <div style="display: flex; gap: 0.75rem;">
+                            <button class="btn-primary" onclick="switchTab('nclex')" style="flex-grow: 1;">Custom Quiz</button>
+                            <button class="btn-outline" onclick="startMockExam()" style="flex-grow: 1;">Mock Exam</button>
+                        </div>
+                    </div>
+
+                    <!-- Department Experience Cards -->
+                    <div class="glass-card col-12">
+                        <h3 class="card-title">Clinical Rotations</h3>
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem; margin-top: 0.5rem;" id="dashboard-dept-grid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CLINICAL SIMULATION TAB -->
+            <section id="simulation" class="tab-content">
+                <div class="simulator-layout">
+                    <!-- Left Department Selector -->
+                    <div class="dept-panel" id="sim-dept-panel">
+                        <!-- Populated dynamically via JS -->
+                    </div>
+
+                    <!-- Right Simulation Dashboard -->
+                    <div class="active-sim-panel">
+                        <!-- Glowing Hospital Patient Monitor -->
+                        <div class="patient-monitor">
+                            <div class="monitor-alarm-banner" id="monitor-alarm">🚨 PATIENT UNSTABLE - ACTION REQUIRED 🚨</div>
+                            <div class="monitor-waveforms">
+                                <div class="waveform-channel">
+                                    <span class="waveform-label green">ECG (II)</span>
+                                    <canvas id="ecg-canvas" class="waveform-canvas"></canvas>
+                                </div>
+                                <div class="waveform-channel">
+                                    <span class="waveform-label blue">SpO2 Pleth</span>
+                                    <canvas id="spo2-canvas" class="waveform-canvas"></canvas>
+                                </div>
+                            </div>
+                            <div class="monitor-vitals">
+                                <div class="vital-readout hr">
+                                    <span class="vital-name">HR</span>
+                                    <div>
+                                        <span class="vital-number" id="vital-hr">72</span>
+                                        <span class="vital-unit">bpm</span>
+                                    </div>
+                                </div>
+                                <div class="vital-readout bp">
+                                    <span class="vital-name">BP</span>
+                                    <div>
+                                        <span class="vital-number" id="vital-bp">120/80</span>
+                                        <span class="vital-unit">mmHg</span>
+                                    </div>
+                                </div>
+                                <div class="vital-readout spo2">
+                                    <span class="vital-name">SpO2</span>
+                                    <div>
+                                        <span class="vital-number" id="vital-spo2">98</span>
+                                        <span class="vital-unit">%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Main Play Area -->
+                        <div class="sim-work-grid">
+                            <!-- Case text and choices -->
+                            <div class="sim-case-details glass-card">
+                                <div class="case-scenario-card">
+                                    <h3 id="scenario-title">Department Case Study</h3>
+                                    <p id="scenario-text">Select a department on the left and click 'Start Simulation' to begin a clinical case study. You will act as the nurse and make decisions that dynamically affect the patient's condition.</p>
+                                </div>
+                                <div class="sim-decision-box" id="decision-box" style="display: none;">
+                                    <h4>What is your next nursing action?</h4>
+                                    <div class="decision-options" id="decision-options">
+                                        <!-- Buttons dynamically generated -->
+                                    </div>
+                                </div>
+                                <div style="margin-top: 1rem; display: flex; justify-content: center;" id="start-sim-container">
+                                    <button class="btn-primary" id="btn-start-sim" onclick="startActualCase()">Start Clinical Simulation</button>
+                                </div>
+                            </div>
+
+                            <!-- SBAR tool summary panel -->
+                            <div class="glass-card">
+                                <h3 class="card-title">Nurse SBAR Handover</h3>
+                                <div class="sbar-container" id="sbar-box">
+                                    <div class="sbar-section s">
+                                        <div class="sbar-title">Situation</div>
+                                        <div class="sbar-content" id="sbar-situation">No active simulation.</div>
+                                    </div>
+                                    <div class="sbar-section b">
+                                        <div class="sbar-title">Background</div>
+                                        <div class="sbar-content" id="sbar-background">-</div>
+                                    </div>
+                                    <div class="sbar-section a">
+                                        <div class="sbar-title">Assessment</div>
+                                        <div class="sbar-content" id="sbar-assessment">-</div>
+                                    </div>
+                                    <div class="sbar-section r">
+                                        <div class="sbar-title">Recommendation</div>
+                                        <div class="sbar-content" id="sbar-recommendation">-</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- NCLEX PREP TAB -->
+            <section id="nclex" class="tab-content">
+                <div class="quiz-container">
+                    <div style="display: flex; gap: 1rem; margin-bottom: 1.5rem;" id="quiz-filter-bar">
+                        <select id="nclex-category-select" class="calc-field" onchange="loadQuestionsByCategory(true)" style="flex-grow: 1; padding: 0.75rem; border-radius: 10px; background: var(--bg-card); border: 1px solid var(--border-color); color: white;">
+                            <option value="all">All Categories (Standard Quiz)</option>
+                            <option value="Pharmacological and Parenteral Therapies">Pharmacological Therapies</option>
+                            <option value="Reduction of Risk Potential">Reduction of Risk Potential</option>
+                            <option value="Physiological Adaptation">Physiological Adaptation</option>
+                            <option value="Safe and Effective Care Environment">Safe & Effective Care Environment</option>
+                            <option value="Medical-Surgical">Medical-Surgical Care</option>
+                            <option value="Mental Health">Mental Health / Psych</option>
+                            <option value="Leadership">Leadership & Delegation</option>
+                            <option value="Pathophysiology">Pathophysiology</option>
+                            <option value="mock_exam">Comprehensive Mock Exam (Premium)</option>
+                        </select>
+                    </div>
+
+                    <div class="glass-card question-card">
+                        <div class="question-category" id="nclex-category">Safe and Effective Care Environment</div>
+                        <div class="question-text" id="nclex-text">Loading question...</div>
+                        
+                        <div id="nclex-options">
+                            <!-- Dynamic Options -->
+                        </div>
+
+                        <!-- Rationale -->
+                        <div class="rationale-card" id="rationale-box">
+                            <div class="rationale-title">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                    <polyline points="22 4 12 14.01 9 11.01"/>
+                                </svg>
+                                Rationale & Clinical Reasoning
+                            </div>
+                            <p id="rationale-text">Rationale content loaded here...</p>
+                        </div>
+                    </div>
+
+                    <div class="quiz-actions">
+                        <span id="quiz-question-counter" style="color: var(--text-secondary); font-size: 0.9rem;">Question 1 of 5</span>
+                        <div style="display: flex; gap: 1rem;">
+                            <button class="btn-outline" id="btn-submit-nclex" onclick="submitNclexAnswer()">Submit Answer</button>
+                            <button class="btn-primary" id="btn-next-nclex" style="display: none;" onclick="loadNextNclexQuestion()">Next Question</button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- PHARMACOLOGY & LABS TAB -->
+            <section id="pharmacology" class="tab-content">
+                <div class="reference-layout">
+                    <!-- Left Sidebar Menu -->
+                    <div class="glass-card">
+                        <div class="ref-search-box">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="ref-search" placeholder="Search drug or lab value..." onkeyup="filterReferenceMenu()">
+                        </div>
+                        <ul class="ref-menu" id="ref-menu">
+                            <li class="ref-menu-item active" onclick="selectReference('calc')">🧮 Dosage Calculator</li>
+                            <li class="ref-menu-item" onclick="selectReference('val')">🧪 Critical Lab Values</li>
+                            <li class="ref-menu-item" onclick="selectReference('digoxin')">💊 Digoxin (Lanoxin)</li>
+                            <li class="ref-menu-item" onclick="selectReference('heparin')">💊 Heparin Sodium</li>
+                            <li class="ref-menu-item" onclick="selectReference('furosemide')">💊 Furosemide (Lasix)</li>
+                            <li class="ref-menu-item" onclick="selectReference('abg')">📊 Arterial Blood Gas (ABGs)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Right Details Panel -->
+                    <div class="glass-card ref-detail-panel" id="ref-detail-container">
+                        <!-- Dosage Calculator (Default) -->
+                        <div id="ref-view-calc" class="ref-view-section active">
+                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Clinical Dosage Calculator</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                                Calculate IV infusion flow rates and medication dosages. Test your answers against standard clinical guidelines.
+                            </p>
+
+                            <div class="med-calc-box">
+                                <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">IV Drip Rate Calculator (gtt/min)</h3>
+                                <div class="calc-input-group">
+                                    <div class="calc-field">
+                                        <label>Total Volume (mL)</label>
+                                        <input type="number" id="calc-vol" value="1000" oninput="calculateIVDrip()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Time (hours)</label>
+                                        <input type="number" id="calc-time" value="8" oninput="calculateIVDrip()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Drop Factor (gtt/mL)</label>
+                                        <input type="number" id="calc-factor" value="15" oninput="calculateIVDrip()">
+                                    </div>
+                                </div>
+                                <div class="calc-result">
+                                    <span>Calculated Infusion Rate:</span>
+                                    <div class="calc-result-value"><span id="calc-drip-rate">31</span> <span style="font-size: 0.9rem; color: var(--text-secondary);">gtt/min</span></div>
+                                </div>
+                            </div>
+
+                            <div class="med-calc-box" style="margin-top: 1.5rem;">
+                                <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Medication Concentration (mL/hr)</h3>
+                                <div class="calc-input-group">
+                                    <div class="calc-field">
+                                        <label>Order Dose (mg/hr)</label>
+                                        <input type="number" id="calc-dose" value="2" oninput="calculateInfusionRate()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Total Drug in Bag (mg)</label>
+                                        <input type="number" id="calc-drug" value="100" oninput="calculateInfusionRate()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Bag Volume (mL)</label>
+                                        <input type="number" id="calc-bag" value="250" oninput="calculateInfusionRate()">
+                                    </div>
+                                </div>
+                                <div class="calc-result">
+                                    <span>Calculated Infusion Pump Rate:</span>
+                                    <div class="calc-result-value"><span id="calc-pump-rate">5.0</span> <span style="font-size: 0.9rem; color: var(--text-secondary);">mL/hr</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lab Values Tab -->
+                        <div id="ref-view-val" class="ref-view-section">
+                            <h2 style="color: var(--secondary); margin-bottom: 1rem;">High-Yield Lab Values Reference</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                                Common reference intervals for NCLEX exam preparation. Pay special attention to critical values.
+                            </p>
+                            <table class="lab-table" id="labs-table-body">
+                                <thead>
+                                    <tr>
+                                        <th>Lab Test</th>
+                                        <th>Normal Reference Range</th>
+                                        <th>Clinical Significance / Warnings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated dynamically via API -->
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Drug Cards (Digoxin, Heparin, Lasix) -->
+                        <div id="ref-view-digoxin" class="ref-view-section">
+                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;" id="drug-name-digoxin">Digoxin</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong id="drug-class-digoxin">Class:</strong></p>
+                            <div class="med-calc-box">
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem;"><strong id="drug-ind-digoxin">Indications:</strong></p>
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem;"><strong id="drug-act-digoxin">Action:</strong></p>
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem; color: var(--danger);"><strong id="drug-nurse-digoxin">Critical Nursing Considerations:</strong></p>
+                            </div>
+                        </div>
+
+                        <div id="ref-view-heparin" class="ref-view-section">
+                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;" id="drug-name-heparin">Heparin</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong id="drug-class-heparin">Class:</strong></p>
+                            <div class="med-calc-box">
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem;"><strong id="drug-ind-heparin">Indications:</strong></p>
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem;"><strong id="drug-act-heparin">Action:</strong></p>
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem; color: var(--danger);"><strong id="drug-nurse-heparin">Critical Nursing Considerations:</strong></p>
+                            </div>
+                        </div>
+
+                        <div id="ref-view-furosemide" class="ref-view-section">
+                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;" id="drug-name-furosemide">Furosemide</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1rem;"><strong id="drug-class-furosemide">Class:</strong></p>
+                            <div class="med-calc-box">
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem;"><strong id="drug-ind-furosemide">Indications:</strong></p>
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem;"><strong id="drug-act-furosemide">Action:</strong></p>
+                                <p style="line-height: 1.6; margin-bottom: 0.75rem; color: var(--warning);"><strong id="drug-nurse-furosemide">Critical Nursing Considerations:</strong></p>
+                            </div>
+                        </div>
+
+                        <div id="ref-view-abg" class="ref-view-section">
+                            <h2 style="color: var(--secondary); margin-bottom: 1rem;">Arterial Blood Gas (ABG) Analysis</h2>
+                            <table class="lab-table" style="margin-bottom: 1.5rem;">
+                                <thead>
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>Normal Range</th>
+                                        <th>Acidosis</th>
+                                        <th>Alkalosis</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td><strong>pH</strong></td>
+                                        <td>7.35 – 7.45</td>
+                                        <td>&lt; 7.35</td>
+                                        <td>&gt; 7.45</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>PaCO₂ (Respiratory)</strong></td>
+                                        <td>35 – 45 mmHg</td>
+                                        <td>&gt; 45 mmHg</td>
+                                        <td>&lt; 35 mmHg</td>
+                                    </tr>
+                                    <tr>
+                                        <td><strong>HCO₃⁻ (Metabolic)</strong></td>
+                                        <td>22 – 26 mEq/L</td>
+                                        <td>&lt; 22 mEq/L</td>
+                                        <td>&gt; 26 mEq/L</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <div class="med-calc-box">
+                                <h3>Tic-Tac-Toe ABG Method</h3>
+                                <p style="line-height: 1.6; margin-top: 0.5rem; font-size: 0.95rem;">
+                                    Create a grid with Acid, Normal, and Base columns. Place pH, PaCO₂, and HCO₃⁻ according to their status. The column with two parameters determines the diagnosis (e.g. pH and PaCO₂ in Acid = Respiratory Acidosis). If the third parameter is opposite, partial compensation is occurring.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI PRECEPTOR CHAT TAB -->
+            <section id="chat" class="tab-content">
+                <div class="chat-layout glass-card">
+                    <div class="chat-panel">
+                        <!-- Messages -->
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Preceptor Initial Welcome -->
+                            <div class="message-bubble preceptor">
+                                <img src="/static/preceptor_avatar.png" class="message-avatar-img" alt="Preceptor Sarah">
+                                <div class="message-content-wrapper">
+                                    <span class="message-sender">Preceptor Sarah, RN</span>
+                                    <div class="message-text">
+                                        Hello! I am your AI Virtual Preceptor. With over 15 years of experience in critical care and nursing education, I am here to help guide your clinical reasoning. 
+                                        <br><br>
+                                        You can ask me to explain medical protocols, review NCLEX study topics, or walk you through a complex patient case study (e.g., cardiogenic shock or respiratory distress). What would you like to discuss today?
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Suggestions -->
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;" id="chat-suggestions">
+                            <span class="badge-outline" style="cursor: pointer;" onclick="sendSuggestedMessage('Explain the priority nursing actions for Sepsis.')">Explain Sepsis protocol</span>
+                            <span class="badge-outline" style="cursor: pointer;" onclick="sendSuggestedMessage('Give me a quick case study challenge in the ER.')">Start an ER case challenge</span>
+                            <span class="badge-outline" style="cursor: pointer;" onclick="sendSuggestedMessage('What are the key tips for answering priority questions on the NCLEX?')">NCLEX Priority strategy</span>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="Ask your clinical preceptor a question..." onkeydown="handleChatKeyDown(event)">
+                            <button class="send-btn" onclick="sendUserChatMessage()">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AI CLINICAL RESEARCH LAB TAB -->
+            <section id="research" class="tab-content">
+                <div class="grid-dashboard">
+                    <!-- Research Query Box -->
+                    <div class="glass-card col-12">
+                        <h3 class="card-title" style="color: var(--primary);">Agentic Clinical Research Lab</h3>
+                        <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                            Query live medical research and clinical trials databases. The Agentic AI will perform web synthesis, scrape active study data, and compile structured clinical insights.
+                        </p>
+                        
+                        <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
+                            <input type="text" id="research-query" placeholder="Enter clinical condition, drug class, or research question (e.g. Sepsis, CAR-T cell therapy, COPD)..." style="flex-grow: 1; padding: 1rem; border-radius: 12px; background: rgba(10, 15, 30, 0.5); border: 1px solid var(--border-color); color: white; font-size: 1rem; outline: none; min-width: 300px;">
+                            
+                            <div style="display: flex; gap: 1.5rem; align-items: center;">
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+                                    <input type="checkbox" id="include-trials" checked style="accent-color: var(--primary); transform: scale(1.2);"> ClinicalTrials.gov
+                                </label>
+                                <label style="display: flex; align-items: center; gap: 0.5rem; cursor: pointer; font-size: 0.9rem;">
+                                    <input type="checkbox" id="include-pubmed" checked style="accent-color: var(--primary); transform: scale(1.2);"> PubMed Literature
+                                </label>
+                            </div>
+                            
+                            <button class="btn-primary" onclick="runClinicalResearch()" style="padding: 1rem 2rem;">Run Deep Synthesis</button>
+                        </div>
+                    </div>
+
+                    <!-- Telemetry Loading Card -->
+                    <div class="glass-card col-12" id="research-loading" style="display: none; text-align: center; padding: 3rem 1.75rem;">
+                        <div style="display: flex; flex-direction: column; align-items: center; gap: 1.5rem;">
+                            <div class="logo-icon" style="animation: pulse 1.5s infinite alternate; width: 64px; height: 64px;">
+                                <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="var(--primary)" stroke-width="2.5">
+                                    <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                                </svg>
+                            </div>
+                            <div>
+                                <h3 style="color: var(--primary); margin-bottom: 0.5rem;">Agentic AI Synthesizer Active</h3>
+                                <p style="color: var(--text-secondary); font-size: 0.9rem;">Scraping databases, retrieving live trial statuses, and compiling evidence-based clinical report...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Report Display Card -->
+                    <div class="glass-card col-8" id="research-report-card" style="display: none;">
+                        <h3 class="card-title" style="color: var(--primary);">Synthesized Clinical Insights</h3>
+                        <div class="badge-outline" id="research-source-badge" style="display: inline-flex; margin-bottom: 0.85rem; font-size: 0.75rem;">
+                            OpenAI status pending
+                        </div>
+                        <div id="research-workflow" style="margin-bottom: 0.85rem; font-size: 0.8rem; color: var(--text-secondary);"></div>
+                        <div id="research-report-content" style="line-height: 1.6; font-size: 1rem; color: var(--text-primary);">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Visual Analytics Chart Card -->
+                    <div class="glass-card col-4" id="research-chart-card" style="display: none;">
+                        <h3 class="card-title">Retrieved Study Metrics</h3>
+                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="research-chart"></canvas>
+                        </div>
+                        <div style="margin-top: 1rem; font-size: 0.8rem; color: var(--text-secondary);" id="research-chart-summary">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- Live Clinical Trials Listings -->
+                    <div class="glass-card col-6" id="research-trials-card" style="display: none;">
+                        <h3 class="card-title" style="color: var(--warning);">ClinicalTrials.gov Records</h3>
+                        <div id="research-trials-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+
+                    <!-- PubMed Literature Listings -->
+                    <div class="glass-card col-6" id="research-pubmed-card" style="display: none;">
+                        <h3 class="card-title" style="color: var(--secondary);">Recent PubMed Publications</h3>
+                        <div id="research-pubmed-list" style="display: flex; flex-direction: column; gap: 1rem;">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Professional Footer -->
+            <footer class="app-footer">
+                <span>© 2026 Preceptor AI — Built for nursing students, by nursing professionals</span>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                    <span class="footer-version">v1.0</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <script src="/static/app.js"></script>
+</body>
+</html>
