@@ -369,6 +369,82 @@ def _get_cors_origins() -> list[str]:
     return origins if origins else ["*"]
 
 
+
+def save_mcp_bridge_context(bridge_url: Optional[str], key: str, summary: str) -> bool:
+    bridge = (bridge_url or os.getenv("MCP_BRIDGE_URL") or "").strip()
+    if not bridge:
+        return False
+    try:
+        url = bridge.split('?')[0]
+        memory_url = f"{url}/memory" if not url.endswith("/memory") else url
+        payload = json.dumps({
+            "key": key,
+            "value": summary,
+            "summary": summary
+        }).encode("utf-8")
+        req = urllib.request.Request(
+            memory_url,
+            data=payload,
+            headers={
+                "Content-Type": "application/json",
+                "User-Agent": "Mozilla/5.0"
+            },
+            method="POST"
+        )
+        with urllib.request.urlopen(req, timeout=5) as response:
+            return response.getcode() in [200, 201]
+    except Exception as exc:
+        print(f"MCP save failed (trying fallback): {exc}")
+        try:
+            req = urllib.request.Request(
+                bridge.split('?')[0],
+                data=json.dumps({"query": f"Remember for key '{key}': {summary}"}).encode("utf-8"),
+                headers={
+                    "Content-Type": "application/json",
+                    "User-Agent": "Mozilla/5.0"
+                },
+                method="POST"
+            )
+            with urllib.request.urlopen(req, timeout=5) as response:
+                return response.getcode() in [200, 201]
+        except Exception as e2:
+            print(f"MCP fallback save failed: {e2}")
+            return False
+
+def expand_case_with_openai(dept: str, original_case: dict, api_key: Optional[str]) -> Optional[dict]:
+    system_prompt = (
+        "You are an expert clinical nursing educator. Your task is to expand a basic simulation case "
+        "into a highly detailed, 5-step interactive clinical scenario with SBAR, vitals progression, "
+        "and decision options. Return only a valid JSON object matching the requested schema."
+    )
+    user_prompt = (
+        f"Expand the clinical simulation case for department '{dept}' (title: '{original_case['title']}').\n"
+        "Generate a JSON object with keys: 'title', 'desc', 'sbar', 'initialVitals', and 'steps'.\n"
+        "Guidelines:\n"
+        "- 'title' must be a professional string (e.g. 'ER Case: Acute Severe Asthma Exacerbation').\n"
+        "- 'desc' must be a 2-3 sentence overview.\n"
+        "- 'sbar' must be a detailed dictionary with keys: 'situation', 'background', 'assessment', 'recommendation'. "
+        "Every SBAR field must contain rich, realistic medical facts (e.g. laboratory numbers, past history, chief complaint).\n"
+        "- 'initialVitals' must be a dictionary with keys: 'hr', 'bp', 'rr', 'temp', 'spo2'.\n"
+        "- 'steps' must be a list of exactly 5 sequential clinical steps. Every step must have:\n"
+        "  * 'text': 3-4 sentences describing the clinical situation, patient signs/symptoms, and nurse findings.\n"
+        "  * 'vitals': dict with keys 'hr', 'bp', 'rr', 'temp', 'spo2' reflecting the physiological state at this step.\n"
+        "  * 'options': array of exactly 4 choices. Each choice must have:\n"
+        "    - 'text': Action description formatted as a nursing command/order (e.g. 'Start high-flow oxygen at 15 L/min via non-rebreather mask').\n"
+        "    - 'score': 100 (optimal priority action), 50 (suboptimal action), or 0 (incorrect/unsafe action).\n"
+        "    - 'next': integer (from 0 to 4 representing the next step index, or 5 to indicate case completion/discharge).\n"
+        "    - 'feedback': A detailed virtual preceptor rationale explaining why the action is correct, incorrect, or suboptimal."
+    )
+    payload = call_openai_json(api_key, system_prompt, user_prompt)
+    if payload and isinstance(payload, dict) and "steps" in payload:
+        for step in payload["steps"]:
+            if not isinstance(step.get("options"), list) or len(step["options"]) != 4:
+                return None
+        payload["title"] = "Expanded Case: " + original_case["title"].split(":")[-1].strip()
+        return payload
+    return None
+
+
 cors_origins = _get_cors_origins()
 allow_credentials = "*" not in cors_origins
 
@@ -389,12 +465,20 @@ class ChatMessage(BaseModel):
 class ChatRequest(BaseModel):
     message: str
     history: List[ChatMessage]
+    context: Optional[str] = None
+    mcp_bridge_url: Optional[str] = None
     api_key: Optional[str] = None
 
 class SimulationActionRequest(BaseModel):
     dept: str
     step: int
     option_index: int
+    mcp_bridge_url: Optional[str] = None
+
+class AIDetailRequest(BaseModel):
+    query: str
+    mcp_bridge_url: Optional[str] = None
+    api_key: Optional[str] = None
 
 class ResearchRequest(BaseModel):
     query: str
@@ -501,12 +585,22 @@ def get_cases():
     return cases_summary
 
 @app.get("/api/simulation/case/{dept}")
-def get_case_details(dept: str):
-    """Retrieve template details for a specific department case."""
+def get_case_details(dept: str, mcp_bridge_url: Optional[str] = None, api_key: Optional[str] = None):
+    """Retrieve template details for a specific department case, dynamically expanding it via OpenAI if needed."""
     if dept not in SIMULATION_CASES:
         raise HTTPException(status_code=404, detail="Department simulation not found")
-    # Return everything except the exact options score/next to prevent cheating in devtools
     case = SIMULATION_CASES[dept]
+    # Expand case using OpenAI if it only has default short (3 steps or less) mock steps
+    if len(case.get("steps", [])) <= 3 and not case.get("title", "").startswith("Expanded Case"):
+        try:
+            expanded = expand_case_with_openai(dept, case, api_key)
+            if expanded:
+                SIMULATION_CASES[dept] = expanded
+                case = expanded
+                if mcp_bridge_url:
+                    save_mcp_bridge_context(mcp_bridge_url, f"case_details::{dept}", f"Expanded case generated for {case['title']}: {json.dumps(case)}")
+        except Exception as exc:
+            print(f"Dynamic case expansion failed: {exc}")
     safe_steps = []
     for step in case["steps"]:
         safe_options = [{"text": opt["text"]} for opt in step["options"]]
@@ -541,7 +635,9 @@ def process_simulation_action(request: SimulationActionRequest):
         raise HTTPException(status_code=400, detail="Invalid option index")
         
     selected_option = step["options"][opt_idx]
-    
+    if request.mcp_bridge_url:
+        summary = f"Student nurse solved step {step_idx+1} in department '{dept}'. Action selected: '{selected_option['text']}'. Score: {selected_option['score']}/100. Feedback received: {selected_option['feedback']}"
+        save_mcp_bridge_context(request.mcp_bridge_url, f"action::sim::{dept}::step::{step_idx}", summary)
     return {
         "score": selected_option["score"],
         "next": selected_option["next"],
@@ -557,6 +653,31 @@ def get_lab_values():
 def get_drug_cards():
     """Retrieve high-yield drug profiles."""
     return DRUG_CARDS
+
+@app.post("/api/reference/ai-detail")
+def get_ai_reference_detail(request: AIDetailRequest):
+    """Generate an in-depth clinical reference profile for a drug or lab value using OpenAI."""
+    query = request.query.strip()
+    system_prompt = (
+        "You are an expert clinical pharmacology and laboratory diagnostics professor. "
+        "Your task is to generate an in-depth clinical study profile for the requested drug or lab value."
+    )
+    user_prompt = (
+        f"Provide a detailed profile for '{query}'.\n"
+        "If it is a drug, return a JSON object with keys: name, classification, mechanism, indications, "
+        "warnings, nursing_considerations, and a calculation_example. "
+        "The calculation_example should walk through a realistic dosage calculation in nursing.\n"
+        "If it is a lab value, return a JSON object with keys: name, normal_range, critical_limits, "
+        "clinical_significance, elevation_causes, depression_causes, and nursing_interventions.\n"
+    )
+    payload = call_openai_json(request.api_key, system_prompt, user_prompt)
+    if payload and isinstance(payload, dict):
+        if request.mcp_bridge_url:
+            summary = f"Expanded clinical reference for '{query}': {json.dumps(payload)}"
+            save_mcp_bridge_context(request.mcp_bridge_url, f"ref::{query}", summary)
+        return payload
+    raise HTTPException(status_code=503, detail="OpenAI detail generation failed.")
+
 
 @app.post("/api/chat")
 async def chat_with_preceptor(request: ChatRequest):
@@ -574,6 +695,15 @@ async def chat_with_preceptor(request: ChatRequest):
         "- If asked about drug dosages, walk through the calculations.\n"
         "- Keep a supportive, professional, yet highly realistic clinical educator tone."
     )
+    if request.context:
+        system_prompt += f"\n\nActive Workspace Context:\n{request.context}"
+    if request.mcp_bridge_url:
+        try:
+            mcp_data = fetch_mcp_bridge_context(request.mcp_bridge_url, "nursing_student_recent_activities")
+            if mcp_data and mcp_data.get("summary"):
+                system_prompt += f"\n\nStudent clinical performance memory (from MCP server):\n{mcp_data['summary']}"
+        except Exception as e:
+            print(f"Failed to fetch student notes from MCP: {e}")
 
     try:
         ai_result = call_openai_chat(request.api_key, system_prompt, request.history, user_message, max_tokens=800, temperature=0.7)
@@ -712,10 +842,38 @@ def get_ai_status():
         "mcp_bridge_url": os.getenv("MCP_BRIDGE_URL") or None
     }
 
-# Serve static files and index.html
+# Serve separate HTML pages
 @app.get("/")
-def serve_index():
-    return FileResponse(INDEX_FILE)
+def serve_root():
+    return RedirectResponse(url="/login")
+
+@app.get("/login")
+def serve_login():
+    return FileResponse(STATIC_DIR / "login.html")
+
+@app.get("/dashboard")
+def serve_dashboard():
+    return FileResponse(STATIC_DIR / "dashboard.html")
+
+@app.get("/interactive-labs")
+def serve_labs():
+    return FileResponse(STATIC_DIR / "labs.html")
+
+@app.get("/skill-iq")
+def serve_skill_iq():
+    return FileResponse(STATIC_DIR / "skill-iq.html")
+
+@app.get("/reference")
+def serve_reference():
+    return FileResponse(STATIC_DIR / "reference.html")
+
+@app.get("/mentor")
+def serve_mentor():
+    return FileResponse(STATIC_DIR / "mentor.html")
+
+@app.get("/research")
+def serve_research():
+    return FileResponse(STATIC_DIR / "research.html")
 
 
 @app.get("/healthz")

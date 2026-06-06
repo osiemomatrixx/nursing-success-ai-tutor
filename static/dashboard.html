@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — Path Library</title>
+    <meta name="description" content="Manage your NCLEX prep paths, view clinical standings, and practice simulated rotations.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+    <!-- Chart.js CDN for visual graphs -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body class="loaded">
+    <!-- MOBILE SIDEBAR TOGGLE -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="logo-text">Preceptor AI</h2>
+                    <span class="logo-sub">Nursing Success</span>
+                </div>
+            </div>
+
+            <div class="sidebar-heading">Learning Workspace</div>
+
+            <nav class="nav-links">
+                <a class="nav-item active" href="/dashboard" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    Path Library
+                </a>
+                <a class="nav-item" href="/interactive-labs" id="nav-labs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Interactive Labs
+                </a>
+                <a class="nav-item" href="/skill-iq" id="nav-skill-iq">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Skill IQ Assessments
+                </a>
+                <a class="nav-item" href="/reference" id="nav-reference">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    Reference Center
+                </a>
+                <a class="nav-item" href="/mentor" id="nav-mentor">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    AI Mentor Support
+                </a>
+                <a class="nav-item" href="/research" id="nav-research">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Research Playground
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar" id="sidebar-avatar">SN</div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h4 id="sidebar-username">Student Nurse</h4>
+                    <p id="subscription-status">Free Account</p>
+                </div>
+                <button class="settings-btn" id="sidebar-settings-btn" title="AI Settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Announcement Bar -->
+            <div class="announcement-bar" id="announcement-bar">
+                <span>🔬 <strong>New:</strong> AI Research Lab powered by GPT-4o &mdash; query PubMed & ClinicalTrials.gov with agentic synthesis across 8 clinical departments</span>
+                <button class="announcement-dismiss" onclick="dismissAnnouncement()" aria-label="Dismiss">&times;</button>
+            </div>
+
+            <header class="top-header">
+                <div class="welcome-section">
+                    <h1 id="page-title">Path Library</h1>
+                    <p id="page-subtitle">Welcome back, Student Nurse. Let's practice clinical judgment today.</p>
+                    <div class="header-subline">
+                        <span>Structured progression</span>
+                        <span>Adaptive remediation</span>
+                        <span>Exam readiness tracking</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="header-clock" id="header-clock"></span>
+                    <div class="portal-meta">RN Pathway • Cohort A</div>
+                    <div class="badge-outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Skill IQ: <span id="header-nclex-score">185</span>
+                    </div>
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(0, 187, 249, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                        💎 Go Premium ($7)
+                    </div>
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(131, 56, 236, 0.15); border-color: var(--accent); color: #c084fc;">
+                        👑 Premium active
+                    </div>
+                </div>
+            </header>
+
+            <!-- DASHBOARD CONTENT -->
+            <section id="dashboard" class="tab-content active">
+                <div class="grid-dashboard">
+                    <!-- Skill IQ Hero Card -->
+                    <div class="col-12 skill-iq-callout-card">
+                        <div class="skill-iq-info">
+                            <span class="path-badge">Active Benchmark</span>
+                            <h3>Measure and Track Your Nursing Readiness</h3>
+                            <p>Verify your clinical standing against peer groups. Our adaptive assessment scores your competency in priority care, pharmacology, and physiological adaptation.</p>
+                            <div class="skill-iq-badge-large">
+                                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                                    <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                                Adaptive Skill IQ Assessment
+                            </div>
+                        </div>
+                        <div class="skill-iq-score-display">
+                            <div class="skill-iq-score-box">
+                                <div class="score-val" id="dashboard-skill-iq-val">185</div>
+                                <div class="score-lbl">Current IQ</div>
+                            </div>
+                            <button class="btn-primary" onclick="window.location.href='/skill-iq'" style="white-space: nowrap; padding: 0.85rem 1.5rem;">Measure Skill IQ</button>
+                        </div>
+                    </div>
+
+                    <!-- Learning Paths Header -->
+                    <div class="col-12" style="margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: white;">Your Learning Paths</h3>
+                    </div>
+
+                    <!-- 3 Learning Path Cards -->
+                    <div class="col-12 paths-grid" style="margin-top: 0;">
+                        <!-- Path 1 -->
+                        <div class="pluralsight-path-card">
+                            <div class="path-header-block">
+                                <span class="path-badge">Learning Path</span>
+                                <h4 class="path-title">NCLEX-RN Prep & Practice</h4>
+                                <p class="path-desc">Master safe, effective care environments, physiological adaptation, and risk reduction rules for the Next-Generation NCLEX.</p>
+                                <div class="path-progress-container">
+                                    <div class="path-progress-info">
+                                        <span>Progress</span>
+                                        <span id="path-nclex-progress-lbl">82%</span>
+                                    </div>
+                                    <div class="path-progress-bar">
+                                        <div class="path-progress-fill" id="path-nclex-progress-fill" style="width: 82%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="path-meta-strip">
+                                <span>18h 40m remaining</span>
+                                <button class="btn-outline" onclick="window.location.href='/skill-iq'" style="padding: 0.4rem 0.85rem; font-size: 0.75rem;">Resume Path</button>
+                            </div>
+                        </div>
+
+                        <!-- Path 2 -->
+                        <div class="pluralsight-path-card">
+                            <div class="path-header-block">
+                                <span class="path-badge">Interactive Lab Path</span>
+                                <h4 class="path-title">Interactive Clinical Rotations</h4>
+                                <p class="path-desc">Build critical clinical reasoning through 8 virtual simulation scenarios covering ER, ICU, Pediatrics, Maternity, and Med-Surg departments.</p>
+                                <div class="path-progress-container">
+                                    <div class="path-progress-info">
+                                        <span>Progress</span>
+                                        <span id="path-rotations-progress-lbl">50%</span>
+                                    </div>
+                                    <div class="path-progress-bar">
+                                        <div class="path-progress-fill" id="path-rotations-progress-fill" style="width: 50%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="path-meta-strip">
+                                <span>12h 15m remaining</span>
+                                <button class="btn-outline" onclick="window.location.href='/interactive-labs'" style="padding: 0.4rem 0.85rem; font-size: 0.75rem;">Resume Path</button>
+                            </div>
+                        </div>
+
+                        <!-- Path 3 -->
+                        <div class="pluralsight-path-card">
+                            <div class="path-header-block">
+                                <span class="path-badge">Reference Path</span>
+                                <h4 class="path-title">Dosage & Pharmacological Safety</h4>
+                                <p class="path-desc">Strengthen dosage calculations, heparin infusions titration, IV flow rates, and high-yield critical nursing considerations.</p>
+                                <div class="path-progress-container">
+                                    <div class="path-progress-info">
+                                        <span>Progress</span>
+                                        <span id="path-pharm-progress-lbl">60%</span>
+                                    </div>
+                                    <div class="path-progress-bar">
+                                        <div class="path-progress-fill" id="path-pharm-progress-fill" style="width: 60%;"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="path-meta-strip">
+                                <span>6h 30m remaining</span>
+                                <button class="btn-outline" onclick="window.location.href='/reference'" style="padding: 0.4rem 0.85rem; font-size: 0.75rem;">Resume Path</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Charts row -->
+                    <div class="glass-card col-6">
+                        <h3 class="card-title">Competency Profile Map</h3>
+                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="radar-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <div class="glass-card col-6">
+                        <h3 class="card-title">Readiness Index Trend</h3>
+                        <div class="chart-wrapper" style="position: relative; height: 260px; width: 100%;">
+                            <canvas id="line-chart"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Mnemonic and completed modules count -->
+                    <div class="glass-card col-4">
+                        <h3 class="card-title">Completed Rotations</h3>
+                        <div class="stat-value" id="stats-sim-count">4</div>
+                        <p class="stat-desc">Complete all 8 standard rotations to unlock advanced clinical certification.</p>
+                        <div style="margin-top: 1.5rem; display: flex; gap: 0.5rem; flex-wrap: wrap;">
+                            <span class="badge-outline" style="font-size: 0.75rem;">ER</span>
+                            <span class="badge-outline" style="font-size: 0.75rem;">ICU</span>
+                            <span class="badge-outline" style="font-size: 0.75rem;">Peds</span>
+                            <span class="badge-outline" style="font-size: 0.75rem;">OB</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-medsurg">MedSurg</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-mental">Psych</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-leadership">Lead</span>
+                            <span class="badge-outline" style="font-size: 0.75rem; display: none;" id="badge-pathophys">Patho</span>
+                        </div>
+                    </div>
+
+                    <div class="glass-card col-8">
+                        <h3 class="card-title" style="color: var(--warning);">High-Yield Mnemonic of the Day</h3>
+                        <div style="margin-top: 0.5rem;">
+                            <h4 style="font-size: 1.15rem; margin-bottom: 0.5rem; color: white;">MONA TASS (Acute Coronary Syndrome Protocol)</h4>
+                            <p style="font-size: 0.9rem; line-height: 1.6; color: var(--text-secondary);">
+                                <strong>Initial ACS Interventions:</strong> 
+                                <strong style="color: white;">M</strong>orphine, 
+                                <strong style="color: white;">O</strong>xygen, 
+                                <strong style="color: white;">N</strong>itroglycerin, 
+                                <strong style="color: white;">A</strong>spirin.<br>
+                                <strong>Secondary Support:</strong> 
+                                <strong style="color: white;">T</strong>hrombolytics, 
+                                <strong style="color: white;">A</strong>nticoagulants (Heparin), 
+                                <strong style="color: white;">S</strong>tool Softeners, 
+                                <strong style="color: white;">S</strong>tatins.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Catalog/Rotations Grid -->
+                    <div class="col-12" style="margin-top: 1rem; border-bottom: 1px solid var(--border-color); padding-bottom: 0.5rem;">
+                        <h3 style="font-size: 1.25rem; font-weight: 600; color: white;">Rotations Library</h3>
+                    </div>
+
+                    <div class="glass-card col-12" style="padding-top: 1rem;">
+                        <div style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 1rem;" id="dashboard-dept-grid">
+                            <!-- Populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Partner Logo Scrolling Marquee -->
+            <div class="wvc-marquee-container">
+                <div class="wvc-marquee-header">Integrations & Academic Partnerships</div>
+                <div class="wvc-marquee-track">
+                    <span class="wvc-partner-logo">Mass General Hospital</span>
+                    <span class="wvc-partner-logo">Boston College Nursing</span>
+                    <span class="wvc-partner-logo">Johns Hopkins Medicine</span>
+                    <span class="wvc-partner-logo">Mayo Clinic</span>
+                    <span class="wvc-partner-logo">Cleveland Clinic</span>
+                    <span class="wvc-partner-logo">UCSF Health</span>
+                    <span class="wvc-partner-logo">Mass General Hospital</span>
+                    <span class="wvc-partner-logo">Boston College Nursing</span>
+                    <span class="wvc-partner-logo">Johns Hopkins Medicine</span>
+                    <span class="wvc-partner-logo">Mayo Clinic</span>
+                    <span class="wvc-partner-logo">Cleveland Clinic</span>
+                    <span class="wvc-partner-logo">UCSF Health</span>
+                </div>
+            </div>
+
+            <!-- Professional Footer -->
+            <footer class="app-footer">
+                <span>© 2026 Preceptor AI — Built for nursing students, by nursing professionals</span>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                    <span class="footer-version">v1.0</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app-core.js"></script>
+    <script src="/static/dashboard.js"></script>
+</body>
+</html>

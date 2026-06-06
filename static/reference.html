@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — Reference Center</title>
+    <meta name="description" content="Access nursing dosage calculators, high-yield drug profiles, critical lab value reference, and arterial blood gas tables.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="loaded">
+    <!-- MOBILE SIDEBAR TOGGLE -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="logo-text">Preceptor AI</h2>
+                    <span class="logo-sub">Nursing Success</span>
+                </div>
+            </div>
+
+            <div class="sidebar-heading">Learning Workspace</div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="/dashboard" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    Path Library
+                </a>
+                <a class="nav-item" href="/interactive-labs" id="nav-labs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Interactive Labs
+                </a>
+                <a class="nav-item" href="/skill-iq" id="nav-skill-iq">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Skill IQ Assessments
+                </a>
+                <a class="nav-item active" href="/reference" id="nav-reference">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    Reference Center
+                </a>
+                <a class="nav-item" href="/mentor" id="nav-mentor">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    AI Mentor Support
+                </a>
+                <a class="nav-item" href="/research" id="nav-research">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Research Playground
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar" id="sidebar-avatar">SN</div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h4 id="sidebar-username">Student Nurse</h4>
+                    <p id="subscription-status">Free Account</p>
+                </div>
+                <button class="settings-btn" id="sidebar-settings-btn" title="AI Settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Announcement Bar -->
+            <div class="announcement-bar" id="announcement-bar">
+                <span>🔬 <strong>New:</strong> AI Research Lab powered by GPT-4o &mdash; query PubMed & ClinicalTrials.gov with agentic synthesis across 8 clinical departments</span>
+                <button class="announcement-dismiss" onclick="dismissAnnouncement()" aria-label="Dismiss">&times;</button>
+            </div>
+
+            <header class="top-header">
+                <div class="welcome-section">
+                    <h1 id="page-title">Reference Center</h1>
+                    <p id="page-subtitle">Medication calculators, laboratory values, and drug monographs.</p>
+                    <div class="header-subline">
+                        <span>IV drip calculations</span>
+                        <span>Normal reference ranges</span>
+                        <span>Pathophysiology summaries</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="header-clock" id="header-clock"></span>
+                    <div class="portal-meta">RN Pathway • Cohort A</div>
+                    <div class="badge-outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Skill IQ: <span id="header-nclex-score">185</span>
+                    </div>
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(0, 187, 249, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                        💎 Go Premium ($7)
+                    </div>
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(131, 56, 236, 0.15); border-color: var(--accent); color: #c084fc;">
+                        👑 Premium active
+                    </div>
+                </div>
+            </header>
+
+            <!-- PHARMACOLOGY & LABS REFERENCE CONTENT -->
+            <section id="pharmacology" class="tab-content active">
+                <div class="reference-layout">
+                    <!-- Left Sidebar Menu -->
+                    <div class="glass-card">
+                        <div class="ref-search-box">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                            </svg>
+                            <input type="text" id="ref-search" placeholder="Search drug or lab value..." onkeyup="filterReferenceMenu()">
+                        </div>
+                        <ul class="ref-menu" id="ref-menu">
+                            <li class="ref-menu-item active" onclick="selectReference('calc')">🧮 Dosage Calculator</li>
+                            <li class="ref-menu-item" onclick="selectReference('val')">🧪 Critical Lab Values</li>
+                            <li class="ref-menu-item" onclick="selectReference('digoxin')">💊 Digoxin (Lanoxin)</li>
+                            <li class="ref-menu-item" onclick="selectReference('heparin')">💊 Heparin Sodium</li>
+                            <li class="ref-menu-item" onclick="selectReference('furosemide')">💊 Furosemide (Lasix)</li>
+                            <li class="ref-menu-item" onclick="selectReference('abg')">📊 Arterial Blood Gas (ABGs)</li>
+                        </ul>
+                    </div>
+
+                    <!-- Right Details Panel -->
+                    <div class="glass-card ref-detail-panel" id="ref-detail-container">
+                        <!-- Dosage Calculator (Default) -->
+                        <div id="ref-view-calc" class="ref-view-section active">
+                            <h2 style="color: var(--primary); margin-bottom: 0.5rem;">Clinical Dosage Calculator</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                                Calculate IV infusion flow rates and medication dosages. Test your answers against standard clinical guidelines.
+                            </p>
+
+                            <div class="med-calc-box">
+                                <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">IV Drip Rate Calculator (gtt/min)</h3>
+                                <div class="calc-input-group">
+                                    <div class="calc-field">
+                                        <label>Total Volume (mL)</label>
+                                        <input type="number" id="calc-vol" value="1000" oninput="calculateIVDrip()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Time (hours)</label>
+                                        <input type="number" id="calc-time" value="8" oninput="calculateIVDrip()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Drop Factor (gtt/mL)</label>
+                                        <input type="number" id="calc-factor" value="15" oninput="calculateIVDrip()">
+                                    </div>
+                                </div>
+                                <div class="calc-result">
+                                    <span>Calculated Infusion Rate:</span>
+                                    <div class="calc-result-value"><span id="calc-drip-rate">31</span> <span style="font-size: 0.9rem; color: var(--text-secondary);">gtt/min</span></div>
+                                </div>
+                            </div>
+
+                            <div class="med-calc-box" style="margin-top: 1.5rem;">
+                                <h3 style="font-size: 1.1rem; margin-bottom: 1rem;">Medication Concentration (mL/hr)</h3>
+                                <div class="calc-input-group">
+                                    <div class="calc-field">
+                                        <label>Order Dose (mg/hr)</label>
+                                        <input type="number" id="calc-dose" value="2" oninput="calculateInfusionRate()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Total Drug in Bag (mg)</label>
+                                        <input type="number" id="calc-drug" value="100" oninput="calculateInfusionRate()">
+                                    </div>
+                                    <div class="calc-field">
+                                        <label>Bag Volume (mL)</label>
+                                        <input type="number" id="calc-bag" value="250" oninput="calculateInfusionRate()">
+                                    </div>
+                                </div>
+                                <div class="calc-result">
+                                    <span>Calculated Infusion Pump Rate:</span>
+                                    <div class="calc-result-value"><span id="calc-pump-rate">5.0</span> <span style="font-size: 0.9rem; color: var(--text-secondary);">mL/hr</span></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Lab Values Tab -->
+                        <div id="ref-view-val" class="ref-view-section">
+                            <h2 style="color: var(--secondary); margin-bottom: 1rem;">High-Yield Lab Values Reference</h2>
+                            <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                                Common reference intervals for NCLEX exam preparation. Click on any laboratory test row to dynamically load an in-depth clinical diagnosis profile.
+                            </p>
+                            <table class="lab-table" id="labs-table-body">
+                                <thead>
+                                    <tr>
+                                        <th>Lab Test</th>
+                                        <th>Normal Reference Range</th>
+                                        <th>Clinical Significance / Warnings</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <!-- Populated dynamically via API -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Professional Footer -->
+            <footer class="app-footer">
+                <span>© 2026 Preceptor AI — Built for nursing students, by nursing professionals</span>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                    <span class="footer-version">v1.0</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app-core.js"></script>
+    <script src="/static/reference.js"></script>
+</body>
+</html>

@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — Login & Access</title>
+    <meta name="description" content="Access the Preceptor AI Nursing Clinical Simulator & NCLEX Prep Platform.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="loaded" style="display: flex; min-height: 100vh; align-items: center; justify-content: center; background: #0a0e17;">
+
+    <div class="auth-overlay" style="position: relative; background: transparent; backdrop-filter: none; display: flex; width: 100%;">
+        <div class="auth-shell">
+            <!-- Left panel detailing features -->
+            <aside class="auth-panel glass-card">
+                <div class="auth-panel-brand">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="logo-text">Preceptor AI</h2>
+                        <span class="logo-sub">Nursing Success</span>
+                    </div>
+                </div>
+                <h3 class="auth-panel-title">Nursing Readiness Command Center</h3>
+                <p class="auth-panel-copy">Build clinical judgment, confidence, and NCLEX precision through structured simulation and measurable progression.</p>
+                <img src="/static/preceptor_avatar.png" alt="AI Preceptor Sarah" style="width: 80px; height: 80px; border-radius: 50%; border: 2px solid var(--primary); display: block; margin: 1.5rem auto; box-shadow: 0 0 15px rgba(0,187,249,0.3);">
+                <div class="auth-panel-metrics">
+                    <div>
+                        <span>Institutional benchmark</span>
+                        <strong>92% confidence lift</strong>
+                    </div>
+                    <div>
+                        <span>Active learner network</span>
+                        <strong>4,200+ students</strong>
+                    </div>
+                    <div>
+                        <span>Practice architecture</span>
+                        <strong>8 clinical domains</strong>
+                    </div>
+                </div>
+                <div class="trust-badges" style="margin-top: 1.5rem;">
+                    <span class="trust-badge">
+                        <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                        NCLEX Blueprint Aligned
+                    </span>
+                    <span class="trust-badge">
+                        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                        Evidence-Based Content
+                    </span>
+                </div>
+            </aside>
+
+            <!-- Right card: login or registration forms -->
+            <div class="auth-card glass-card" style="max-width: 500px; width: 100%; align-self: center;">
+                <div class="logo-container" style="justify-content: center; margin-bottom: 1.5rem;">
+                    <div class="logo-icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                        </svg>
+                    </div>
+                    <div>
+                        <h2 class="logo-text">Preceptor AI</h2>
+                        <span class="logo-sub">Nursing Success</span>
+                    </div>
+                </div>
+
+                <!-- SIGN IN VIEW -->
+                <div id="signin-view">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.4rem;">Sign In to AI Tutor</h3>
+                    <div class="auth-proof-strip" style="display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; background: rgba(0, 0, 0, 0.2); padding: 0.75rem; border-radius: 8px; margin-bottom: 1rem; text-align: center;">
+                        <div class="proof-stat">
+                            <span class="proof-value" id="proof-pass-rate" style="display: block; font-size: 1.25rem; font-weight: 700; color: var(--primary);">92%</span>
+                            <span class="proof-label" style="font-size: 0.7rem; color: var(--text-secondary);">NCLEX confidence lift</span>
+                        </div>
+                        <div class="proof-stat">
+                            <span class="proof-value" id="proof-active-learners" style="display: block; font-size: 1.25rem; font-weight: 700; color: var(--secondary);">4,200+</span>
+                            <span class="proof-label" style="font-size: 0.7rem; color: var(--text-secondary);">active nursing learners</span>
+                        </div>
+                    </div>
+                    <div class="auth-social-proof" style="text-align: center; background: rgba(255, 255, 255, 0.02); padding: 0.85rem; border-radius: 8px; margin-bottom: 1.25rem; font-style: italic; font-size: 0.82rem; color: var(--text-secondary); border: 1px solid var(--border-color);">
+                        <p id="auth-proof-quote">"I stopped second-guessing priority questions after one week of simulations."</p>
+                        <span id="auth-proof-author" style="display: block; margin-top: 0.35rem; font-weight: 600; color: white;">- Senior Nursing Student, Boston</span>
+                    </div>
+                    <form onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>Student Email</label>
+                            <input type="email" id="login-email" required placeholder="student@nursing.edu">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Password</label>
+                            <input type="password" id="login-password" required placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">Access AI Platform</button>
+                        <button type="button" class="btn-outline" style="width: 100%; margin-top: 0.75rem; padding: 0.95rem;" onclick="useDemoLogin()">Try Instant Demo Access</button>
+                    </form>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 1.5rem;">
+                        Don't have an account? <a href="#" onclick="toggleAuthView('register')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Register here</a>
+                    </p>
+                    <p style="text-align: center; font-size: 0.75rem; color: var(--text-secondary); margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                        Demo Account: <strong>student@nursing.edu</strong> / <strong>password</strong>
+                    </p>
+                </div>
+
+                <!-- REGISTER VIEW -->
+                <div id="register-view" style="display: none;">
+                    <h3 style="text-align: center; margin-bottom: 1.5rem; font-size: 1.4rem;">Student Registration</h3>
+                    <form onsubmit="handleRegister(event)">
+                        <div class="form-group">
+                            <label>Full Name</label>
+                            <input type="text" id="register-name" required placeholder="Jane Doe">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Residential Address</label>
+                            <input type="text" id="register-address" required placeholder="123 Care Street, Boston, MA">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Email Address</label>
+                            <input type="email" id="register-email" required placeholder="student@nursing.edu">
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Nursing Course / Study Track</label>
+                            <select id="register-course" style="width: 100%; padding: 0.75rem; border-radius: 8px; background: rgba(10, 15, 30, 0.6); border: 1px solid var(--border-color); color: white; font-family: inherit; font-size: 0.9rem; outline: none;">
+                                <option value="BSN - Bachelor of Science in Nursing">BSN - Bachelor in Nursing</option>
+                                <option value="ADN - Associate Degree in Nursing">ADN - Associate in Nursing</option>
+                                <option value="NCLEX Prep Fast Track">NCLEX Prep Fast Track</option>
+                                <option value="LPN to BSN Transition">LPN to BSN Transition</option>
+                            </select>
+                        </div>
+                        <div class="form-group" style="margin-top: 0.75rem;">
+                            <label>Password</label>
+                            <input type="password" id="register-password" required placeholder="••••••••">
+                        </div>
+                        <button type="submit" class="btn-primary" style="width: 100%; margin-top: 1.5rem; padding: 1rem;">Register & Send Confirmation</button>
+                    </form>
+                    <p style="text-align: center; font-size: 0.85rem; color: var(--text-secondary); margin-top: 1.5rem;">
+                        Already have an account? <a href="#" onclick="toggleAuthView('signin')" style="color: var(--primary); font-weight: 600; text-decoration: none;">Sign In here</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+        <div class="auth-overlay-footer">
+            © 2026 Preceptor AI &bull; Privacy Policy &bull; Terms of Service &bull; Built for nursing students, by nursing professionals
+        </div>
+    </div>
+
+    <script src="/static/login.js"></script>
+</body>
+</html>

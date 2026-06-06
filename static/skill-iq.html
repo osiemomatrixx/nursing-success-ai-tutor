@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — Skill IQ Assessments</title>
+    <meta name="description" content="Take adaptive NCLEX-style assessments and measure your clinical judgment Skill IQ.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="loaded">
+    <!-- MOBILE SIDEBAR TOGGLE -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="logo-text">Preceptor AI</h2>
+                    <span class="logo-sub">Nursing Success</span>
+                </div>
+            </div>
+
+            <div class="sidebar-heading">Learning Workspace</div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="/dashboard" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    Path Library
+                </a>
+                <a class="nav-item" href="/interactive-labs" id="nav-labs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Interactive Labs
+                </a>
+                <a class="nav-item active" href="/skill-iq" id="nav-skill-iq">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Skill IQ Assessments
+                </a>
+                <a class="nav-item" href="/reference" id="nav-reference">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    Reference Center
+                </a>
+                <a class="nav-item" href="/mentor" id="nav-mentor">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    AI Mentor Support
+                </a>
+                <a class="nav-item" href="/research" id="nav-research">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Research Playground
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar" id="sidebar-avatar">SN</div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h4 id="sidebar-username">Student Nurse</h4>
+                    <p id="subscription-status">Free Account</p>
+                </div>
+                <button class="settings-btn" id="sidebar-settings-btn" title="AI Settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Announcement Bar -->
+            <div class="announcement-bar" id="announcement-bar">
+                <span>🔬 <strong>New:</strong> AI Research Lab powered by GPT-4o &mdash; query PubMed & ClinicalTrials.gov with agentic synthesis across 8 clinical departments</span>
+                <button class="announcement-dismiss" onclick="dismissAnnouncement()" aria-label="Dismiss">&times;</button>
+            </div>
+
+            <header class="top-header">
+                <div class="welcome-section">
+                    <h1 id="page-title">Skill IQ Assessments</h1>
+                    <p id="page-subtitle">Measure and track your NCLEX exam readiness using our adaptive testing engine.</p>
+                    <div class="header-subline">
+                        <span>Timed adaptive questions</span>
+                        <span>Competency mapping</span>
+                        <span>Performance metrics</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="header-clock" id="header-clock"></span>
+                    <div class="portal-meta">RN Pathway • Cohort A</div>
+                    <div class="badge-outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Skill IQ: <span id="header-nclex-score">185</span>
+                    </div>
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(0, 187, 249, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                        💎 Go Premium ($7)
+                    </div>
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(131, 56, 236, 0.15); border-color: var(--accent); color: #c084fc;">
+                        👑 Premium active
+                    </div>
+                </div>
+            </header>
+
+            <!-- SKILL IQ ASSESSMENTS TAB -->
+            <section id="nclex" class="tab-content active">
+                <!-- VIEW 1: LANDING/WELCOME PAGE -->
+                <div id="skill-iq-welcome-view" class="assessment-welcome-wrapper">
+                    <span class="assessment-welcome-badge">Skill IQ</span>
+                    <h2>Measure your Clinical Standings</h2>
+                    <p>Verify your readiness index before taking the NCLEX exam. This adaptive simulation dynamically structures questions based on your performance, mapping core nursing domains.</p>
+                    
+                    <div class="assessment-criteria-grid">
+                        <div class="criteria-item">
+                            <strong>Adaptive Format</strong>
+                            <span>Questions match your skill level</span>
+                        </div>
+                        <div class="criteria-item">
+                            <strong>NCLEX Blueprint</strong>
+                            <span>Based on actual NCSBN categories</span>
+                        </div>
+                        <div class="criteria-item">
+                            <strong>20 Questions</strong>
+                            <span>Takes approximately 15 minutes</span>
+                        </div>
+                    </div>
+                    
+                    <button class="btn-primary" onclick="startSkillIQAssessment()" style="padding: 1rem 2rem;">Begin Adaptive Assessment</button>
+                </div>
+
+                <!-- VIEW 2: ACTIVE QUESTION WORKSPACE -->
+                <div id="skill-iq-test-view" class="glass-card" style="display: none; max-width: 800px; margin: 1.5rem auto; padding: 2rem;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding-bottom: 1rem; margin-bottom: 1.5rem;">
+                        <span id="assessment-q-index" style="font-weight: 600; color: var(--secondary);">Question 1 of 20</span>
+                        <div style="display: flex; align-items: center; gap: 0.5rem; color: var(--primary); font-family: var(--font-mono); font-weight: bold;">
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
+                            </svg>
+                            <span id="assessment-timer">60s</span>
+                        </div>
+                    </div>
+                    
+                    <div class="assessment-timer-bar-container">
+                        <div id="assessment-timer-bar" class="assessment-timer-fill"></div>
+                    </div>
+                    
+                    <div style="margin-bottom: 2rem;">
+                        <span id="assessment-q-category" class="path-badge" style="margin-bottom: 0.75rem;">Pharmacological & Parenteral Therapies</span>
+                        <h3 id="assessment-q-text" style="color: white; line-height: 1.5; font-size: 1.15rem; font-weight: 500;">Active NCLEX Question Stem?</h3>
+                    </div>
+                    
+                    <div id="assessment-options-container" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                        <!-- Populated dynamically -->
+                    </div>
+                    
+                    <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem; display: flex; justify-content: flex-end;">
+                        <button class="btn-primary" id="btn-submit-assessment" onclick="submitAssessmentAnswer()" disabled style="padding: 0.85rem 2rem;">Confirm Answer & Continue</button>
+                    </div>
+                </div>
+
+                <!-- VIEW 3: RESULTS / METRICS SCORE WHEEL -->
+                <div id="skill-iq-results-view" class="skill-iq-results-wrapper" style="display: none;">
+                    <span class="assessment-welcome-badge">Report Card</span>
+                    <h2 style="color: white; margin-top: 0.5rem;">Your Assessment is Complete!</h2>
+                    
+                    <div class="results-layout">
+                        <!-- Left Circular Score Wheel -->
+                        <div class="score-wheel-container">
+                            <svg class="score-wheel-svg" viewBox="0 0 120 120">
+                                <circle class="score-wheel-bg-circle" cx="60" cy="60" r="50"></circle>
+                                <circle class="score-wheel-fill-circle" id="results-score-circle" cx="60" cy="60" r="50" stroke="var(--primary)" stroke-dasharray="314" stroke-dashoffset="314"></circle>
+                            </svg>
+                            <div class="score-wheel-center-text">
+                                <div class="score-num" id="results-score-val">185</div>
+                                <div class="score-label">Skill IQ</div>
+                                <span class="rating-level-pill proficient" id="results-rating-level">Proficient</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Statistics details -->
+                        <div class="results-stats-panel">
+                            <h3 id="results-title-header">Your Skill IQ is Proficient</h3>
+                            <p id="results-percentile-desc">You scored higher than 82% of nursing students in your cohort. This score demonstrates strong clinical judgment and ready safe practice capability.</p>
+                            
+                            <table class="subskills-table">
+                                <thead>
+                                    <tr>
+                                        <th>Skill Category</th>
+                                        <th>Standing</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="results-subskills-body">
+                                    <!-- Filled dynamically by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    
+                    <div class="results-actions-strip">
+                        <button class="btn-outline" onclick="resetSkillIQAssessment()">Retake Assessment</button>
+                        <button class="btn-primary" onclick="window.location.href='/dashboard'">View Path Library</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Professional Footer -->
+            <footer class="app-footer">
+                <span>© 2026 Preceptor AI — Built for nursing students, by nursing professionals</span>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                    <span class="footer-version">v1.0</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app-core.js"></script>
+    <script src="/static/skill-iq.js"></script>
+</body>
+</html>

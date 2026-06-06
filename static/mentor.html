@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — AI Mentor Support</title>
+    <meta name="description" content="Engage in a continuous clinical tutoring session with Nurse Preceptor Sarah.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="loaded">
+    <!-- MOBILE SIDEBAR TOGGLE -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="logo-text">Preceptor AI</h2>
+                    <span class="logo-sub">Nursing Success</span>
+                </div>
+            </div>
+
+            <div class="sidebar-heading">Learning Workspace</div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="/dashboard" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    Path Library
+                </a>
+                <a class="nav-item" href="/interactive-labs" id="nav-labs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Interactive Labs
+                </a>
+                <a class="nav-item" href="/skill-iq" id="nav-skill-iq">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Skill IQ Assessments
+                </a>
+                <a class="nav-item" href="/reference" id="nav-reference">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    Reference Center
+                </a>
+                <a class="nav-item active" href="/mentor" id="nav-mentor">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    AI Mentor Support
+                </a>
+                <a class="nav-item" href="/research" id="nav-research">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Research Playground
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar" id="sidebar-avatar">SN</div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h4 id="sidebar-username">Student Nurse</h4>
+                    <p id="subscription-status">Free Account</p>
+                </div>
+                <button class="settings-btn" id="sidebar-settings-btn" title="AI Settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Announcement Bar -->
+            <div class="announcement-bar" id="announcement-bar">
+                <span>🔬 <strong>New:</strong> AI Research Lab powered by GPT-4o &mdash; query PubMed & ClinicalTrials.gov with agentic synthesis across 8 clinical departments</span>
+                <button class="announcement-dismiss" onclick="dismissAnnouncement()" aria-label="Dismiss">&times;</button>
+            </div>
+
+            <header class="top-header">
+                <div class="welcome-section">
+                    <h1 id="page-title">AI Mentor Support</h1>
+                    <p id="page-subtitle">Chat continuously with Nurse Preceptor Sarah for clinical judgment and prep advice.</p>
+                    <div class="header-subline">
+                        <span>Evidence-based guidance</span>
+                        <span>Clinical protocol breakdown</span>
+                        <span>Personalized remediation</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="header-clock" id="header-clock"></span>
+                    <div class="portal-meta">RN Pathway • Cohort A</div>
+                    <div class="badge-outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Skill IQ: <span id="header-nclex-score">185</span>
+                    </div>
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(0, 187, 249, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                        💎 Go Premium ($7)
+                    </div>
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(131, 56, 236, 0.15); border-color: var(--accent); color: #c084fc;">
+                        👑 Premium active
+                    </div>
+                </div>
+            </header>
+
+            <!-- AI PRECEPTOR CHAT CONTENT -->
+            <section id="chat" class="tab-content active">
+                <div class="chat-layout glass-card">
+                    <div class="chat-panel">
+                        <!-- Messages -->
+                        <div class="chat-messages" id="chat-messages">
+                            <!-- Preceptor Initial Welcome -->
+                            <div class="message-bubble preceptor">
+                                <img src="/static/preceptor_avatar.png" class="message-avatar-img" alt="Preceptor Sarah">
+                                <div class="message-content-wrapper">
+                                    <span class="message-sender">Preceptor Sarah, RN</span>
+                                    <div class="message-text">
+                                        Hello! I am your AI Virtual Preceptor. With over 15 years of experience in critical care and nursing education, I am here to help guide your clinical reasoning. 
+                                        <br><br>
+                                        You can ask me to explain medical protocols, review NCLEX study topics, or walk you through a complex patient case study (e.g., cardiogenic shock or respiratory distress). What would you like to discuss today?
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Suggestions -->
+                        <div style="display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap;" id="chat-suggestions">
+                            <span class="badge-outline" style="cursor: pointer;" onclick="sendSuggestedMessage('Explain the priority nursing actions for Sepsis.')">Explain Sepsis protocol</span>
+                            <span class="badge-outline" style="cursor: pointer;" onclick="sendSuggestedMessage('Give me a quick case study challenge in the ER.')">Start an ER case challenge</span>
+                            <span class="badge-outline" style="cursor: pointer;" onclick="sendSuggestedMessage('What are the key tips for answering priority questions on the NCLEX?')">NCLEX Priority strategy</span>
+                        </div>
+
+                        <!-- Input Area -->
+                        <div class="chat-input-area">
+                            <input type="text" id="chat-input" class="chat-input" placeholder="Ask your clinical preceptor a question..." onkeydown="handleChatKeyDown(event)">
+                            <button class="send-btn" onclick="sendUserChatMessage()">
+                                <svg viewBox="0 0 24 24" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                    <line x1="22" y1="2" x2="11" y2="13"/>
+                                    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Professional Footer -->
+            <footer class="app-footer">
+                <span>© 2026 Preceptor AI — Built for nursing students, by nursing professionals</span>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                    <span class="footer-version">v1.0</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app-core.js"></script>
+    <script src="/static/mentor.js"></script>
+</body>
+</html>

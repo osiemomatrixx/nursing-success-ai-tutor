@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preceptor AI — Interactive Labs</title>
+    <meta name="description" content="Engage in interactive nursing clinical simulations across 8 departments. Make priority commands and manage vitals.">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ec008c' stroke-width='2.5'><path d='M22 12h-4l-3 9L9 3l-3 9H2'/></svg>">
+    <link rel="stylesheet" href="/static/style.css">
+</head>
+<body class="loaded">
+    <!-- MOBILE SIDEBAR TOGGLE -->
+    <button class="sidebar-toggle" id="sidebar-toggle" aria-label="Toggle navigation">
+        <svg viewBox="0 0 24 24" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="3" y1="6" x2="21" y2="6"/>
+            <line x1="3" y1="12" x2="21" y2="12"/>
+            <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+    </button>
+    <div class="sidebar-backdrop" id="sidebar-backdrop"></div>
+
+    <div class="app-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="logo-container">
+                <div class="logo-icon">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                        <path d="M22 12h-4l-3 9L9 3l-3 9H2"/>
+                    </svg>
+                </div>
+                <div>
+                    <h2 class="logo-text">Preceptor AI</h2>
+                    <span class="logo-sub">Nursing Success</span>
+                </div>
+            </div>
+
+            <div class="sidebar-heading">Learning Workspace</div>
+
+            <nav class="nav-links">
+                <a class="nav-item" href="/dashboard" id="nav-dashboard">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="3" width="7" height="9"/>
+                        <rect x="14" y="3" width="7" height="5"/>
+                        <rect x="14" y="12" width="7" height="9"/>
+                        <rect x="3" y="16" width="7" height="5"/>
+                    </svg>
+                    Path Library
+                </a>
+                <a class="nav-item active" href="/interactive-labs" id="nav-labs">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                    </svg>
+                    Interactive Labs
+                </a>
+                <a class="nav-item" href="/skill-iq" id="nav-skill-iq">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <polyline points="12 6 12 12 16 14"/>
+                    </svg>
+                    Skill IQ Assessments
+                </a>
+                <a class="nav-item" href="/reference" id="nav-reference">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/>
+                        <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/>
+                    </svg>
+                    Reference Center
+                </a>
+                <a class="nav-item" href="/mentor" id="nav-mentor">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                    </svg>
+                    AI Mentor Support
+                </a>
+                <a class="nav-item" href="/research" id="nav-research">
+                    <svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="2" y1="12" x2="22" y2="12"/>
+                        <line x1="12" y1="2" x2="12" y2="22"/>
+                        <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+                    </svg>
+                    Research Playground
+                </a>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-avatar" id="sidebar-avatar">SN</div>
+                <div class="user-info" style="flex-grow: 1;">
+                    <h4 id="sidebar-username">Student Nurse</h4>
+                    <p id="subscription-status">Free Account</p>
+                </div>
+                <button class="settings-btn" id="sidebar-settings-btn" title="AI Settings">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Announcement Bar -->
+            <div class="announcement-bar" id="announcement-bar">
+                <span>🔬 <strong>New:</strong> AI Research Lab powered by GPT-4o &mdash; query PubMed & ClinicalTrials.gov with agentic synthesis across 8 clinical departments</span>
+                <button class="announcement-dismiss" onclick="dismissAnnouncement()" aria-label="Dismiss">&times;</button>
+            </div>
+
+            <header class="top-header">
+                <div class="welcome-section">
+                    <h1 id="page-title">Interactive Labs</h1>
+                    <p id="page-subtitle">Select a clinic department and click 'Start Lab Simulation' to manage care.</p>
+                    <div class="header-subline">
+                        <span>Structured SBAR handover</span>
+                        <span>Dynamic vital readouts</span>
+                        <span>Clinical command selection</span>
+                    </div>
+                </div>
+                <div class="header-actions">
+                    <span class="header-clock" id="header-clock"></span>
+                    <div class="portal-meta">RN Pathway • Cohort A</div>
+                    <div class="badge-outline">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        Skill IQ: <span id="header-nclex-score">185</span>
+                    </div>
+                    <div class="badge-outline" id="premium-upgrade-badge" style="cursor: pointer; background: rgba(0, 187, 249, 0.1); border-color: var(--primary);" onclick="openSubscriptionModal()">
+                        💎 Go Premium ($7)
+                    </div>
+                    <div class="badge-outline" id="premium-active-badge" style="display: none; background: rgba(131, 56, 236, 0.15); border-color: var(--accent); color: #c084fc;">
+                        👑 Premium active
+                    </div>
+                </div>
+            </header>
+
+            <!-- INTERACTIVE LABS TAB -->
+            <section id="simulation" class="tab-content active">
+                <div class="lab-layout-wrapper">
+                    <!-- Left Pane: Lab Instructions & SBAR Handover -->
+                    <aside class="lab-panel left-pane">
+                        <div class="lab-panel-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                                    <polyline points="14 2 14 8 20 8"/>
+                                </svg>
+                                Patient chart details
+                            </h3>
+                        </div>
+                        <div class="lab-panel-body">
+                            <div class="sbar-tab-menu" id="sbar-tabs-container">
+                                <button class="sbar-tab-btn active" onclick="switchSbarTab('s')">Situation</button>
+                                <button class="sbar-tab-btn" onclick="switchSbarTab('b')">Background</button>
+                                <button class="sbar-tab-btn" onclick="switchSbarTab('a')">Assessment</button>
+                                <button class="sbar-tab-btn" onclick="switchSbarTab('r')">Recommendation</button>
+                            </div>
+                            <div id="sbar-tab-content-s" class="sbar-tab-content active" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Situation (S):</strong>
+                                <span id="sbar-situation">No active simulation. Select a lab from the right column to begin.</span>
+                            </div>
+                            <div id="sbar-tab-content-b" class="sbar-tab-content" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Background (B):</strong>
+                                <span id="sbar-background">-</span>
+                            </div>
+                            <div id="sbar-tab-content-a" class="sbar-tab-content" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Assessment (A):</strong>
+                                <span id="sbar-assessment">-</span>
+                            </div>
+                            <div id="sbar-tab-content-r" class="sbar-tab-content" style="font-size: 0.88rem; line-height: 1.6;">
+                                <strong style="color: white; display: block; margin-bottom: 0.5rem;">Recommendation (R):</strong>
+                                <span id="sbar-recommendation">-</span>
+                            </div>
+                            
+                            <div style="margin-top: 2rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+                                <h4 style="font-size: 0.78rem; text-transform: uppercase; color: var(--text-secondary); margin-bottom: 0.75rem;">Clinical References</h4>
+                                <ul style="list-style: none; display: flex; flex-direction: column; gap: 0.5rem; font-size: 0.82rem;">
+                                    <li><a href="/reference" style="color: var(--primary); text-decoration: none; font-weight: 500;">🧪 View Lab Ranges</a></li>
+                                    <li><a href="/reference" style="color: var(--secondary); text-decoration: none; font-weight: 500;">🧮 Dosage Calculators</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </aside>
+
+                    <!-- Center Pane: Workspace & Decisions -->
+                    <main class="lab-panel center-pane">
+                        <div class="lab-panel-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/>
+                                </svg>
+                                Clinical Workspace
+                            </h3>
+                            <span class="badge-outline" id="lab-step-counter" style="font-size: 0.75rem; border-color: var(--primary); color: var(--primary);">Lab Ready</span>
+                        </div>
+                        <div class="lab-panel-body">
+                            <div class="workspace-scenario-section">
+                                <h4 id="scenario-title" style="margin-bottom: 0.5rem; color: white; font-size: 1.15rem;">Department Case Study</h4>
+                                <p id="scenario-text">Select a clinical lab rotation from the right panel and click 'Start Lab Simulation' to begin. You will act as the nurse and make priority decisions that affect the patient's vitals monitor in real time.</p>
+                            </div>
+                            
+                            <div class="workspace-actions-section" id="decision-box" style="display: none;">
+                                <h4 style="margin-bottom: 1rem; color: white; font-size: 0.95rem; font-weight: 600;">Select your next clinical action command:</h4>
+                                <div id="decision-options" style="display: flex; flex-direction: column; gap: 0.5rem;">
+                                    <!-- Options generated dynamically -->
+                                </div>
+                            </div>
+                            
+                            <div style="margin-top: 1.5rem; display: flex; justify-content: center;" id="start-sim-container">
+                                <button class="btn-primary" id="btn-start-sim" onclick="startActualCase()" style="padding: 1rem 2rem;">Start Lab Simulation</button>
+                            </div>
+                        </div>
+                    </main>
+
+                    <!-- Right Pane: Vitals Monitor & Lab ROTATIONS Picker -->
+                    <aside class="lab-panel right-pane">
+                        <div class="lab-panel-header">
+                            <h3>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/>
+                                </svg>
+                                Monitor & Rotations
+                            </h3>
+                        </div>
+                        <div class="lab-panel-body" style="padding: 0; display: flex; flex-direction: column; overflow: hidden;">
+                            <!-- Glowing Vitals Monitor -->
+                            <div class="patient-monitor" style="border-radius: 0; border: none; border-bottom: 1px solid var(--border-color); height: 210px; min-height: 210px;">
+                                <div class="monitor-alarm-banner" id="monitor-alarm" style="font-size: 0.75rem; padding: 0.25rem;">🚨 UNSTABLE VITALS 🚨</div>
+                                <div class="monitor-waveforms" style="padding: 0.4rem; height: 110px;">
+                                    <div class="waveform-channel" style="height: 48px;">
+                                        <span class="waveform-label green" style="font-size: 0.6rem;">ECG</span>
+                                        <canvas id="ecg-canvas" class="waveform-canvas" style="height: 100%;"></canvas>
+                                    </div>
+                                    <div class="waveform-channel" style="height: 48px; margin-top: 0.3rem;">
+                                        <span class="waveform-label blue" style="font-size: 0.6rem;">SpO2</span>
+                                        <canvas id="spo2-canvas" class="waveform-canvas" style="height: 100%;"></canvas>
+                                    </div>
+                                </div>
+                                <div class="monitor-vitals" style="border-top: 1px solid #1f2937; padding: 0.4rem; grid-template-columns: repeat(3, 1fr);">
+                                    <div class="vital-readout hr"><span class="vital-name" style="font-size: 0.6rem;">HR</span><div><span class="vital-number" id="vital-hr" style="font-size: 1.25rem;">72</span><span class="vital-unit" style="font-size: 0.55rem;">bpm</span></div></div>
+                                    <div class="vital-readout bp"><span class="vital-name" style="font-size: 0.6rem;">BP</span><div><span class="vital-number" id="vital-bp" style="font-size: 0.82rem; line-height: 1.8;">120/80</span></div></div>
+                                    <div class="vital-readout spo2"><span class="vital-name" style="font-size: 0.6rem;">SpO2</span><div><span class="vital-number" id="vital-spo2" style="font-size: 1.25rem;">98</span><span class="vital-unit" style="font-size: 0.55rem;">%</span></div></div>
+                                </div>
+                            </div>
+                            
+                            <!-- Rotations Menu list inside diagnostics right column -->
+                            <div style="flex-grow: 1; display: flex; flex-direction: column; overflow: hidden;">
+                                <div style="padding: 0.75rem 1rem; border-bottom: 1px solid var(--border-color); background: rgba(0,0,0,0.15);"><h4 style="font-size: 0.75rem; text-transform: uppercase; color: var(--text-secondary); letter-spacing: 0.05em;">Rotations</h4></div>
+                                <div style="flex-grow: 1; overflow-y: auto; padding: 0.5rem; display: flex; flex-direction: column; gap: 0.4rem;" id="sim-dept-panel">
+                                    <!-- Filled dynamically by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </aside>
+                </div>
+            </section>
+
+            <!-- Professional Footer -->
+            <footer class="app-footer">
+                <span>© 2026 Preceptor AI — Built for nursing students, by nursing professionals</span>
+                <div class="footer-links">
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Support</a>
+                    <span class="footer-version">v1.0</span>
+                </div>
+            </footer>
+        </main>
+    </div>
+
+    <!-- Scripts -->
+    <script src="/static/app-core.js"></script>
+    <script src="/static/labs.js"></script>
+</body>
+</html>
